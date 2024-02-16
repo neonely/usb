@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -g -O0 -c -DSTM32F103VC -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\usb_user -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\cmsis_boot -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\core -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\lcd -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\stm_lib\inc -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\stm_lib -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\cmsis -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\nrf24l01\inc -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\usb_user\inc -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\lcd\inc -I..\..\..\..\..\..\Users\vladimir\Projects\stm32 -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\usb_driver\inc -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\core\inc -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\usb_driver -I..\..\..\..\..\..\Users\vladimir\Projects\stm32\usb\nrf24l01">
+      <target file="hw_config.o" lastModified="169f0df2661">
+         <source file="..\..\..\usb_user\src\hw_config.c" lastModified="1679531f055"/>
+      </target>
+      <target file="stm32f10x_spi.o" lastModified="169f0df2d85">
+         <source file="..\..\..\stm_lib\src\stm32f10x_spi.c" lastModified="1690d3d30e5"/>
+      </target>
+      <target file="usb_int.o" lastModified="169f0df2392">
+         <source file="..\..\..\usb_driver\src\usb_int.c" lastModified="13c5e5d7a50"/>
+      </target>
+      <target file="usb_sil.o" lastModified="169f0df29cc">
+         <source file="..\..\..\usb_driver\src\usb_sil.c" lastModified="13c5e5d7a50"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="169f0df294f">
+         <source file="..\..\..\stm_lib\src\stm32f10x_rcc.c" lastModified="1679451e096"/>
+      </target>
+      <target file="stm32f10x_i2c.o" lastModified="169f0df2e31">
+         <source file="..\..\..\stm_lib\src\stm32f10x_i2c.c" lastModified="1679510dc32"/>
+      </target>
+      <target file="misc.o" lastModified="169f0df2cd9">
+         <source file="..\..\..\stm_lib\src\misc.c" lastModified="167953f31de"/>
+      </target>
+      <target file="nrf24l01.o" lastModified="169f0df22f6">
+         <source file="..\..\..\nrf24l01\src\nrf24l01.c" lastModified="16917f369d8"/>
+      </target>
+      <target file="usb_mem.o" lastModified="169f0df2ebd">
+         <source file="..\..\..\usb_driver\src\usb_mem.c" lastModified="13c5e5d7a50"/>
+      </target>
+      <target file="usb_endp.o" lastModified="169f0df2bb0">
+         <source file="..\..\..\usb_user\src\usb_endp.c" lastModified="169f0df06f1"/>
+      </target>
+      <target file="my_inits.o" lastModified="169f0df2269">
+         <source file="..\..\..\core\src\my_inits.c" lastModified="16912eb9a9e"/>
+      </target>
+      <target file="usb_istr.o" lastModified="169f0df2f3a">
+         <source file="..\..\..\usb_user\src\usb_istr.c" lastModified="1624d291db8"/>
+      </target>
+      <target file="stm32f10x_flash.o" lastModified="169f0df2a87">
+         <source file="..\..\..\stm_lib\src\stm32f10x_flash.c" lastModified="167951910e1"/>
+      </target>
+      <target file="usb_regs.o" lastModified="169f0df25e4">
+         <source file="..\..\..\usb_driver\src\usb_regs.c" lastModified="13c5e5d7a50"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="169f0df26fd">
+         <source file="..\..\..\stm_lib\src\stm32f10x_gpio.c" lastModified="1679451e5b6"/>
+      </target>
+      <target file="usb_core.o" lastModified="169f0df21bd">
+         <source file="..\..\..\usb_driver\src\usb_core.c" lastModified="13c5e5d7a50"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="169f0df241f">
+         <source file="..\..\..\cmsis_boot\system_stm32f10x.c" lastModified="1679451d9ee"/>
+      </target>
+      <target file="usb_desc.o" lastModified="169f0df2509">
+         <source file="..\..\..\usb_user\src\usb_desc.c" lastModified="167952a1d50"/>
+      </target>
+      <target file="startup_stm32f10x_hd.o" lastModified="169f0df247c">
+         <source file="..\..\..\cmsis_boot\startup\startup_stm32f10x_hd.c" lastModified="1679451d9df"/>
+      </target>
+      <target file="usb_init.o" lastModified="169f0df2816">
+         <source file="..\..\..\usb_driver\src\usb_init.c" lastModified="13c5e5d7a50"/>
+      </target>
+      <target file="usb_prop.o" lastModified="169f0df2799">
+         <source file="..\..\..\usb_user\src\usb_prop.c" lastModified="168e96055cb"/>
+      </target>
+      <target file="lcd.o" lastModified="169f0df2c4c">
+         <source file="..\..\..\lcd\src\lcd.c" lastModified="1624d0f2d18"/>
+      </target>
+      <target file="main.o" lastModified="169f0df28a3">
+         <source file="..\..\..\main.c" lastModified="16912cbe344"/>
+      </target>
+   </processor>
+</history>

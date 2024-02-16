@@ -1,0 +1,327 @@
+ARM GAS  /tmp/ccHTF4QH.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usb_endp.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.rodata.Device_OUT_Data.str1.4,"aMS",%progbits,1
+  16              		.align	2
+  17              	.LC0:
+  18 0000 57524954 		.ascii	"WRITE DEVICE\000"
+  18      45204445 
+  18      56494345 
+  18      00
+  19              		.section	.text.Device_OUT_Data,"ax",%progbits
+  20              		.align	1
+  21              		.global	Device_OUT_Data
+  22              		.arch armv7-m
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  26              		.fpu softvfp
+  28              	Device_OUT_Data:
+  29              	.LFB61:
+  30              		.file 1 "usb_user/Src/usb_endp.c"
+   1:usb_user/Src/usb_endp.c **** #include "stm32f10x.h"
+   2:usb_user/Src/usb_endp.c **** #include "usb_prop.h"
+   3:usb_user/Src/usb_endp.c **** #include "usb_endp.h"
+   4:usb_user/Src/usb_endp.c **** #include "usb_mem.h"
+   5:usb_user/Src/usb_endp.c **** #include <stdio.h>
+   6:usb_user/Src/usb_endp.c **** 
+   7:usb_user/Src/usb_endp.c **** #define SWO_OUTPUT
+   8:usb_user/Src/usb_endp.c **** 
+   9:usb_user/Src/usb_endp.c **** extern uint8_t bulk_buffer[64];
+  10:usb_user/Src/usb_endp.c **** unsigned char str1[] = "Hello from USB device STM32+++\nHello from USB device STM32++++\n";
+  11:usb_user/Src/usb_endp.c **** 
+  12:usb_user/Src/usb_endp.c **** void Device_IN_Data(void);
+  13:usb_user/Src/usb_endp.c **** void Device_OUT_Data(void);
+  14:usb_user/Src/usb_endp.c **** 
+  15:usb_user/Src/usb_endp.c **** void EP1_OUT_Callback()
+  16:usb_user/Src/usb_endp.c **** {
+  17:usb_user/Src/usb_endp.c **** 	Device_OUT_Data();
+  18:usb_user/Src/usb_endp.c **** }
+  19:usb_user/Src/usb_endp.c **** 
+  20:usb_user/Src/usb_endp.c **** void EP2_IN_Callback()
+  21:usb_user/Src/usb_endp.c **** {
+  22:usb_user/Src/usb_endp.c **** 	Device_IN_Data();
+  23:usb_user/Src/usb_endp.c **** }
+  24:usb_user/Src/usb_endp.c **** 
+  25:usb_user/Src/usb_endp.c **** /* Запись в девайс */
+ARM GAS  /tmp/ccHTF4QH.s 			page 2
+
+
+  26:usb_user/Src/usb_endp.c **** void Device_OUT_Data()
+  27:usb_user/Src/usb_endp.c **** {
+  31              		.loc 1 27 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35 0000 10B5     		push	{r4, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 4, -8
+  39              		.cfi_offset 14, -4
+  28:usb_user/Src/usb_endp.c **** 	GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+  40              		.loc 1 28 2 view .LVU1
+  41 0002 0D4C     		ldr	r4, .L3
+  42 0004 0221     		movs	r1, #2
+  43 0006 2046     		mov	r0, r4
+  44 0008 FFF7FEFF 		bl	GPIO_ResetBits
+  45              	.LVL0:
+  29:usb_user/Src/usb_endp.c **** 
+  30:usb_user/Src/usb_endp.c **** 	uint16_t len = GetEPRxCount(EP1_OUT);
+  46              		.loc 1 30 2 view .LVU2
+  47              		.loc 1 30 17 is_stmt 0 view .LVU3
+  48 000c 0120     		movs	r0, #1
+  49 000e FFF7FEFF 		bl	GetEPRxCount
+  50              	.LVL1:
+  51 0012 0246     		mov	r2, r0
+  52              	.LVL2:
+  31:usb_user/Src/usb_endp.c **** 	PMAToUserBufferCopy(bulk_buffer, ENDP1_RXADDR, len);
+  53              		.loc 1 31 2 is_stmt 1 view .LVU4
+  54 0014 C021     		movs	r1, #192
+  55 0016 0948     		ldr	r0, .L3+4
+  56 0018 FFF7FEFF 		bl	PMAToUserBufferCopy
+  57              	.LVL3:
+  32:usb_user/Src/usb_endp.c **** 	SetEPRxStatus(ENDP1, EP_RX_VALID);
+  58              		.loc 1 32 2 view .LVU5
+  59 001c 4FF44051 		mov	r1, #12288
+  60 0020 0120     		movs	r0, #1
+  61 0022 FFF7FEFF 		bl	SetEPRxStatus
+  62              	.LVL4:
+  33:usb_user/Src/usb_endp.c **** 
+  34:usb_user/Src/usb_endp.c **** 	#ifdef SWO_OUTPUT
+  35:usb_user/Src/usb_endp.c ****             printf("WRITE DEVICE\n");
+  63              		.loc 1 35 13 view .LVU6
+  64 0026 0648     		ldr	r0, .L3+8
+  65 0028 FFF7FEFF 		bl	puts
+  66              	.LVL5:
+  36:usb_user/Src/usb_endp.c ****     #endif
+  37:usb_user/Src/usb_endp.c **** 	
+  38:usb_user/Src/usb_endp.c **** 	GPIO_SetBits(GPIOA, GPIO_Pin_1);
+  67              		.loc 1 38 2 view .LVU7
+  68 002c 0221     		movs	r1, #2
+  69 002e 2046     		mov	r0, r4
+  70 0030 FFF7FEFF 		bl	GPIO_SetBits
+  71              	.LVL6:
+  39:usb_user/Src/usb_endp.c **** }
+  72              		.loc 1 39 1 is_stmt 0 view .LVU8
+  73 0034 10BD     		pop	{r4, pc}
+ARM GAS  /tmp/ccHTF4QH.s 			page 3
+
+
+  74              	.L4:
+  75 0036 00BF     		.align	2
+  76              	.L3:
+  77 0038 00080140 		.word	1073809408
+  78 003c 00000000 		.word	bulk_buffer
+  79 0040 00000000 		.word	.LC0
+  80              		.cfi_endproc
+  81              	.LFE61:
+  83              		.section	.text.EP1_OUT_Callback,"ax",%progbits
+  84              		.align	1
+  85              		.global	EP1_OUT_Callback
+  86              		.syntax unified
+  87              		.thumb
+  88              		.thumb_func
+  89              		.fpu softvfp
+  91              	EP1_OUT_Callback:
+  92              	.LFB59:
+  16:usb_user/Src/usb_endp.c **** 	Device_OUT_Data();
+  93              		.loc 1 16 1 is_stmt 1 view -0
+  94              		.cfi_startproc
+  95              		@ args = 0, pretend = 0, frame = 0
+  96              		@ frame_needed = 0, uses_anonymous_args = 0
+  97 0000 08B5     		push	{r3, lr}
+  98              	.LCFI1:
+  99              		.cfi_def_cfa_offset 8
+ 100              		.cfi_offset 3, -8
+ 101              		.cfi_offset 14, -4
+  17:usb_user/Src/usb_endp.c **** }
+ 102              		.loc 1 17 2 view .LVU10
+ 103 0002 FFF7FEFF 		bl	Device_OUT_Data
+ 104              	.LVL7:
+  18:usb_user/Src/usb_endp.c **** 
+ 105              		.loc 1 18 1 is_stmt 0 view .LVU11
+ 106 0006 08BD     		pop	{r3, pc}
+ 107              		.cfi_endproc
+ 108              	.LFE59:
+ 110              		.section	.rodata.Device_IN_Data.str1.4,"aMS",%progbits,1
+ 111              		.align	2
+ 112              	.LC1:
+ 113 0000 52454144 		.ascii	"READ DEVICE\000"
+ 113      20444556 
+ 113      49434500 
+ 114              		.section	.text.Device_IN_Data,"ax",%progbits
+ 115              		.align	1
+ 116              		.global	Device_IN_Data
+ 117              		.syntax unified
+ 118              		.thumb
+ 119              		.thumb_func
+ 120              		.fpu softvfp
+ 122              	Device_IN_Data:
+ 123              	.LFB62:
+  40:usb_user/Src/usb_endp.c **** 
+  41:usb_user/Src/usb_endp.c **** /* Чтение девайса */
+  42:usb_user/Src/usb_endp.c **** void Device_IN_Data()
+  43:usb_user/Src/usb_endp.c **** {
+ 124              		.loc 1 43 1 is_stmt 1 view -0
+ 125              		.cfi_startproc
+ARM GAS  /tmp/ccHTF4QH.s 			page 4
+
+
+ 126              		@ args = 0, pretend = 0, frame = 0
+ 127              		@ frame_needed = 0, uses_anonymous_args = 0
+ 128 0000 10B5     		push	{r4, lr}
+ 129              	.LCFI2:
+ 130              		.cfi_def_cfa_offset 8
+ 131              		.cfi_offset 4, -8
+ 132              		.cfi_offset 14, -4
+  44:usb_user/Src/usb_endp.c **** 	GPIO_ResetBits(GPIOA, GPIO_Pin_1);
+ 133              		.loc 1 44 2 view .LVU13
+ 134 0002 0D4C     		ldr	r4, .L9
+ 135 0004 0221     		movs	r1, #2
+ 136 0006 2046     		mov	r0, r4
+ 137 0008 FFF7FEFF 		bl	GPIO_ResetBits
+ 138              	.LVL8:
+  45:usb_user/Src/usb_endp.c **** 	
+  46:usb_user/Src/usb_endp.c **** 	UserToPMABufferCopy(str1, ENDP2_TXADDR, sizeof(str1));
+ 139              		.loc 1 46 2 view .LVU14
+ 140 000c 4022     		movs	r2, #64
+ 141 000e 4FF48071 		mov	r1, #256
+ 142 0012 0A48     		ldr	r0, .L9+4
+ 143 0014 FFF7FEFF 		bl	UserToPMABufferCopy
+ 144              	.LVL9:
+  47:usb_user/Src/usb_endp.c **** 	SetEPTxCount((ENDP2_TXADDR & 0x7F), 64);
+ 145              		.loc 1 47 2 view .LVU15
+ 146 0018 4021     		movs	r1, #64
+ 147 001a 0020     		movs	r0, #0
+ 148 001c FFF7FEFF 		bl	SetEPTxCount
+ 149              	.LVL10:
+  48:usb_user/Src/usb_endp.c **** 	SetEPTxStatus(ENDP2, EP_TX_VALID);
+ 150              		.loc 1 48 2 view .LVU16
+ 151 0020 3021     		movs	r1, #48
+ 152 0022 0220     		movs	r0, #2
+ 153 0024 FFF7FEFF 		bl	SetEPTxStatus
+ 154              	.LVL11:
+  49:usb_user/Src/usb_endp.c **** 
+  50:usb_user/Src/usb_endp.c **** 	#ifdef SWO_OUTPUT
+  51:usb_user/Src/usb_endp.c ****             printf("READ DEVICE\n");
+ 155              		.loc 1 51 13 view .LVU17
+ 156 0028 0548     		ldr	r0, .L9+8
+ 157 002a FFF7FEFF 		bl	puts
+ 158              	.LVL12:
+  52:usb_user/Src/usb_endp.c ****     #endif
+  53:usb_user/Src/usb_endp.c **** 	
+  54:usb_user/Src/usb_endp.c **** 	GPIO_SetBits(GPIOA, GPIO_Pin_1);
+ 159              		.loc 1 54 2 view .LVU18
+ 160 002e 0221     		movs	r1, #2
+ 161 0030 2046     		mov	r0, r4
+ 162 0032 FFF7FEFF 		bl	GPIO_SetBits
+ 163              	.LVL13:
+  55:usb_user/Src/usb_endp.c **** }
+ 164              		.loc 1 55 1 is_stmt 0 view .LVU19
+ 165 0036 10BD     		pop	{r4, pc}
+ 166              	.L10:
+ 167              		.align	2
+ 168              	.L9:
+ 169 0038 00080140 		.word	1073809408
+ 170 003c 00000000 		.word	.LANCHOR0
+ARM GAS  /tmp/ccHTF4QH.s 			page 5
+
+
+ 171 0040 00000000 		.word	.LC1
+ 172              		.cfi_endproc
+ 173              	.LFE62:
+ 175              		.section	.text.EP2_IN_Callback,"ax",%progbits
+ 176              		.align	1
+ 177              		.global	EP2_IN_Callback
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 181              		.fpu softvfp
+ 183              	EP2_IN_Callback:
+ 184              	.LFB60:
+  21:usb_user/Src/usb_endp.c **** 	Device_IN_Data();
+ 185              		.loc 1 21 1 is_stmt 1 view -0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189 0000 08B5     		push	{r3, lr}
+ 190              	.LCFI3:
+ 191              		.cfi_def_cfa_offset 8
+ 192              		.cfi_offset 3, -8
+ 193              		.cfi_offset 14, -4
+  22:usb_user/Src/usb_endp.c **** }
+ 194              		.loc 1 22 2 view .LVU21
+ 195 0002 FFF7FEFF 		bl	Device_IN_Data
+ 196              	.LVL14:
+  23:usb_user/Src/usb_endp.c **** 
+ 197              		.loc 1 23 1 is_stmt 0 view .LVU22
+ 198 0006 08BD     		pop	{r3, pc}
+ 199              		.cfi_endproc
+ 200              	.LFE60:
+ 202              		.global	str1
+ 203              		.section	.data.str1,"aw"
+ 204              		.align	2
+ 205              		.set	.LANCHOR0,. + 0
+ 208              	str1:
+ 209 0000 48656C6C 		.ascii	"Hello from USB device STM32+++\012Hello from USB de"
+ 209      6F206672 
+ 209      6F6D2055 
+ 209      53422064 
+ 209      65766963 
+ 210 0030 76696365 		.ascii	"vice STM32++++\012\000"
+ 210      2053544D 
+ 210      33322B2B 
+ 210      2B2B0A00 
+ 211              		.text
+ 212              	.Letext0:
+ 213              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 214              		.file 3 "cmsis_boot/Inc/stm32f10x.h"
+ 215              		.file 4 "stm_lib/Inc/stm32f10x_gpio.h"
+ 216              		.file 5 "usb_driver/Inc/usb_mem.h"
+ 217              		.file 6 "usb_driver/Inc/usb_regs.h"
+ 218              		.file 7 "<built-in>"
+ARM GAS  /tmp/ccHTF4QH.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb_endp.c
+     /tmp/ccHTF4QH.s:16     .rodata.Device_OUT_Data.str1.4:0000000000000000 $d
+     /tmp/ccHTF4QH.s:20     .text.Device_OUT_Data:0000000000000000 $t
+     /tmp/ccHTF4QH.s:28     .text.Device_OUT_Data:0000000000000000 Device_OUT_Data
+     /tmp/ccHTF4QH.s:77     .text.Device_OUT_Data:0000000000000038 $d
+     /tmp/ccHTF4QH.s:84     .text.EP1_OUT_Callback:0000000000000000 $t
+     /tmp/ccHTF4QH.s:91     .text.EP1_OUT_Callback:0000000000000000 EP1_OUT_Callback
+     /tmp/ccHTF4QH.s:111    .rodata.Device_IN_Data.str1.4:0000000000000000 $d
+     /tmp/ccHTF4QH.s:115    .text.Device_IN_Data:0000000000000000 $t
+     /tmp/ccHTF4QH.s:122    .text.Device_IN_Data:0000000000000000 Device_IN_Data
+     /tmp/ccHTF4QH.s:169    .text.Device_IN_Data:0000000000000038 $d
+     /tmp/ccHTF4QH.s:176    .text.EP2_IN_Callback:0000000000000000 $t
+     /tmp/ccHTF4QH.s:183    .text.EP2_IN_Callback:0000000000000000 EP2_IN_Callback
+     /tmp/ccHTF4QH.s:208    .data.str1:0000000000000000 str1
+     /tmp/ccHTF4QH.s:204    .data.str1:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+GPIO_ResetBits
+GetEPRxCount
+PMAToUserBufferCopy
+SetEPRxStatus
+puts
+GPIO_SetBits
+bulk_buffer
+UserToPMABufferCopy
+SetEPTxCount
+SetEPTxStatus

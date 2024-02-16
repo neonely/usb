@@ -1,0 +1,130 @@
+ARM GAS  /tmp/cc8GXQST.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"hw_config.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.USB_Interrupts_Config,"ax",%progbits
+  16              		.align	1
+  17              		.global	USB_Interrupts_Config
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	USB_Interrupts_Config:
+  25              	.LFB56:
+  26              		.file 1 "usb_user/Src/hw_config.c"
+   1:usb_user/Src/hw_config.c **** #include "hw_config.h"
+   2:usb_user/Src/hw_config.c **** #include "usb_lib.h"
+   3:usb_user/Src/hw_config.c **** 
+   4:usb_user/Src/hw_config.c **** void USB_Interrupts_Config(void)
+   5:usb_user/Src/hw_config.c **** {
+  27              		.loc 1 5 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 10B5     		push	{r4, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  36 0002 82B0     		sub	sp, sp, #8
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 16
+   6:usb_user/Src/hw_config.c ****   NVIC_InitTypeDef NVIC_InitStructure;
+  39              		.loc 1 6 3 view .LVU1
+   7:usb_user/Src/hw_config.c **** 
+   8:usb_user/Src/hw_config.c ****   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+  40              		.loc 1 8 3 view .LVU2
+  41 0004 4FF4C060 		mov	r0, #1536
+  42 0008 FFF7FEFF 		bl	NVIC_PriorityGroupConfig
+  43              	.LVL0:
+   9:usb_user/Src/hw_config.c **** 
+  10:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
+  44              		.loc 1 10 3 view .LVU3
+  45              		.loc 1 10 38 is_stmt 0 view .LVU4
+  46 000c 1423     		movs	r3, #20
+  47 000e 8DF80430 		strb	r3, [sp, #4]
+  11:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+ARM GAS  /tmp/cc8GXQST.s 			page 2
+
+
+  48              		.loc 1 11 3 is_stmt 1 view .LVU5
+  49              		.loc 1 11 56 is_stmt 0 view .LVU6
+  50 0012 0124     		movs	r4, #1
+  51 0014 8DF80540 		strb	r4, [sp, #5]
+  12:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  52              		.loc 1 12 3 is_stmt 1 view .LVU7
+  53              		.loc 1 12 49 is_stmt 0 view .LVU8
+  54 0018 8DF80640 		strb	r4, [sp, #6]
+  13:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  55              		.loc 1 13 3 is_stmt 1 view .LVU9
+  56              		.loc 1 13 41 is_stmt 0 view .LVU10
+  57 001c 8DF80740 		strb	r4, [sp, #7]
+  14:usb_user/Src/hw_config.c ****   NVIC_Init(&NVIC_InitStructure);
+  58              		.loc 1 14 3 is_stmt 1 view .LVU11
+  59 0020 01A8     		add	r0, sp, #4
+  60 0022 FFF7FEFF 		bl	NVIC_Init
+  61              	.LVL1:
+  15:usb_user/Src/hw_config.c **** 
+  16:usb_user/Src/hw_config.c **** 
+  17:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;
+  62              		.loc 1 17 3 view .LVU12
+  63              		.loc 1 17 38 is_stmt 0 view .LVU13
+  64 0026 1323     		movs	r3, #19
+  65 0028 8DF80430 		strb	r3, [sp, #4]
+  18:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  66              		.loc 1 18 3 is_stmt 1 view .LVU14
+  67              		.loc 1 18 56 is_stmt 0 view .LVU15
+  68 002c 8DF80540 		strb	r4, [sp, #5]
+  19:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+  69              		.loc 1 19 3 is_stmt 1 view .LVU16
+  70              		.loc 1 19 49 is_stmt 0 view .LVU17
+  71 0030 0023     		movs	r3, #0
+  72 0032 8DF80630 		strb	r3, [sp, #6]
+  20:usb_user/Src/hw_config.c ****   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  73              		.loc 1 20 3 is_stmt 1 view .LVU18
+  74              		.loc 1 20 41 is_stmt 0 view .LVU19
+  75 0036 8DF80740 		strb	r4, [sp, #7]
+  21:usb_user/Src/hw_config.c ****   NVIC_Init(&NVIC_InitStructure);
+  76              		.loc 1 21 3 is_stmt 1 view .LVU20
+  77 003a 01A8     		add	r0, sp, #4
+  78 003c FFF7FEFF 		bl	NVIC_Init
+  79              	.LVL2:
+  22:usb_user/Src/hw_config.c **** }
+  80              		.loc 1 22 1 is_stmt 0 view .LVU21
+  81 0040 02B0     		add	sp, sp, #8
+  82              	.LCFI2:
+  83              		.cfi_def_cfa_offset 8
+  84              		@ sp needed
+  85 0042 10BD     		pop	{r4, pc}
+  86              		.cfi_endproc
+  87              	.LFE56:
+  89              		.text
+  90              	.Letext0:
+  91              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+  92              		.file 3 "cmsis_boot/Inc/stm32f10x.h"
+  93              		.file 4 "stm_lib/Inc/misc.h"
+ARM GAS  /tmp/cc8GXQST.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 hw_config.c
+     /tmp/cc8GXQST.s:16     .text.USB_Interrupts_Config:0000000000000000 $t
+     /tmp/cc8GXQST.s:24     .text.USB_Interrupts_Config:0000000000000000 USB_Interrupts_Config
+
+UNDEFINED SYMBOLS
+NVIC_PriorityGroupConfig
+NVIC_Init

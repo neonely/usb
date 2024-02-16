@@ -1,0 +1,462 @@
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"my_inits.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.init_my_gpio,"ax",%progbits
+  16              		.align	1
+  17              		.global	init_my_gpio
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	init_my_gpio:
+  25              	.LFB56:
+  26              		.file 1 "core/Src/my_inits.c"
+   1:core/Src/my_inits.c **** #include "my_inits.h"
+   2:core/Src/my_inits.c **** 
+   3:core/Src/my_inits.c **** ErrorStatus HSEStartUpStatus;
+   4:core/Src/my_inits.c **** 
+   5:core/Src/my_inits.c **** void init_my_gpio()
+   6:core/Src/my_inits.c **** {
+  27              		.loc 1 6 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 24
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 70B5     		push	{r4, r5, r6, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 16
+  34              		.cfi_offset 4, -16
+  35              		.cfi_offset 5, -12
+  36              		.cfi_offset 6, -8
+  37              		.cfi_offset 14, -4
+  38 0002 86B0     		sub	sp, sp, #24
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 40
+   7:core/Src/my_inits.c ****     GPIO_InitTypeDef  GPIO_InitStructure;
+  41              		.loc 1 7 5 view .LVU1
+   8:core/Src/my_inits.c ****     I2C_InitTypeDef I2C_InitStructure;
+  42              		.loc 1 8 5 view .LVU2
+   9:core/Src/my_inits.c ****     
+  10:core/Src/my_inits.c ****     /* LED usb, Rx Tx */
+  11:core/Src/my_inits.c ****     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+  43              		.loc 1 11 5 view .LVU3
+  44 0004 0121     		movs	r1, #1
+  45 0006 0420     		movs	r0, #4
+  46 0008 FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+  47              	.LVL0:
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 2
+
+
+  12:core/Src/my_inits.c ****     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+  48              		.loc 1 12 5 view .LVU4
+  49              		.loc 1 12 33 is_stmt 0 view .LVU5
+  50 000c 0226     		movs	r6, #2
+  51 000e ADF81460 		strh	r6, [sp, #20]	@ movhi
+  13:core/Src/my_inits.c ****     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  52              		.loc 1 13 5 is_stmt 1 view .LVU6
+  53              		.loc 1 13 35 is_stmt 0 view .LVU7
+  54 0012 0324     		movs	r4, #3
+  55 0014 8DF81640 		strb	r4, [sp, #22]
+  14:core/Src/my_inits.c ****     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+  56              		.loc 1 14 5 is_stmt 1 view .LVU8
+  57              		.loc 1 14 34 is_stmt 0 view .LVU9
+  58 0018 1023     		movs	r3, #16
+  59 001a 8DF81730 		strb	r3, [sp, #23]
+  15:core/Src/my_inits.c ****     GPIO_Init(GPIOA, &GPIO_InitStructure);
+  60              		.loc 1 15 5 is_stmt 1 view .LVU10
+  61 001e 1E4D     		ldr	r5, .L3
+  62 0020 05A9     		add	r1, sp, #20
+  63 0022 2846     		mov	r0, r5
+  64 0024 FFF7FEFF 		bl	GPIO_Init
+  65              	.LVL1:
+  16:core/Src/my_inits.c ****     GPIO_SetBits(GPIOA, GPIO_Pin_1);
+  66              		.loc 1 16 5 view .LVU11
+  67 0028 3146     		mov	r1, r6
+  68 002a 2846     		mov	r0, r5
+  69 002c FFF7FEFF 		bl	GPIO_SetBits
+  70              	.LVL2:
+  17:core/Src/my_inits.c **** 
+  18:core/Src/my_inits.c ****     /* Configure I2C_EE pins: SCL and SDA */
+  19:core/Src/my_inits.c ****     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
+  71              		.loc 1 19 5 view .LVU12
+  72              		.loc 1 19 33 is_stmt 0 view .LVU13
+  73 0030 4FF44063 		mov	r3, #3072
+  74 0034 ADF81430 		strh	r3, [sp, #20]	@ movhi
+  20:core/Src/my_inits.c ****     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  75              		.loc 1 20 5 is_stmt 1 view .LVU14
+  76              		.loc 1 20 35 is_stmt 0 view .LVU15
+  77 0038 8DF81640 		strb	r4, [sp, #22]
+  21:core/Src/my_inits.c ****     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+  78              		.loc 1 21 5 is_stmt 1 view .LVU16
+  79              		.loc 1 21 34 is_stmt 0 view .LVU17
+  80 003c 1C23     		movs	r3, #28
+  81 003e 8DF81730 		strb	r3, [sp, #23]
+  22:core/Src/my_inits.c ****     GPIO_Init(GPIOB, &GPIO_InitStructure);
+  82              		.loc 1 22 5 is_stmt 1 view .LVU18
+  83 0042 05A9     		add	r1, sp, #20
+  84 0044 1548     		ldr	r0, .L3+4
+  85 0046 FFF7FEFF 		bl	GPIO_Init
+  86              	.LVL3:
+  23:core/Src/my_inits.c **** 
+  24:core/Src/my_inits.c ****     /* I2C configuration */
+  25:core/Src/my_inits.c ****     RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
+  87              		.loc 1 25 5 view .LVU19
+  88 004a 0121     		movs	r1, #1
+  89 004c 4FF48000 		mov	r0, #4194304
+  90 0050 FFF7FEFF 		bl	RCC_APB1PeriphClockCmd
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 3
+
+
+  91              	.LVL4:
+  26:core/Src/my_inits.c ****     I2C_StructInit(&I2C_InitStructure);
+  92              		.loc 1 26 5 view .LVU20
+  93 0054 01A8     		add	r0, sp, #4
+  94 0056 FFF7FEFF 		bl	I2C_StructInit
+  95              	.LVL5:
+  27:core/Src/my_inits.c ****     I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+  96              		.loc 1 27 5 view .LVU21
+  97              		.loc 1 27 32 is_stmt 0 view .LVU22
+  98 005a 0023     		movs	r3, #0
+  99 005c ADF80830 		strh	r3, [sp, #8]	@ movhi
+  28:core/Src/my_inits.c ****     I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+ 100              		.loc 1 28 5 is_stmt 1 view .LVU23
+ 101              		.loc 1 28 37 is_stmt 0 view .LVU24
+ 102 0060 4BF6FF73 		movw	r3, #49151
+ 103 0064 ADF80A30 		strh	r3, [sp, #10]	@ movhi
+  29:core/Src/my_inits.c ****     I2C_InitStructure.I2C_OwnAddress1 = 0x15;
+ 104              		.loc 1 29 5 is_stmt 1 view .LVU25
+ 105              		.loc 1 29 39 is_stmt 0 view .LVU26
+ 106 0068 1523     		movs	r3, #21
+ 107 006a ADF80C30 		strh	r3, [sp, #12]	@ movhi
+  30:core/Src/my_inits.c ****     I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+ 108              		.loc 1 30 5 is_stmt 1 view .LVU27
+ 109              		.loc 1 30 31 is_stmt 0 view .LVU28
+ 110 006e 4FF48063 		mov	r3, #1024
+ 111 0072 ADF80E30 		strh	r3, [sp, #14]	@ movhi
+  31:core/Src/my_inits.c ****     I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+ 112              		.loc 1 31 5 is_stmt 1 view .LVU29
+ 113              		.loc 1 31 47 is_stmt 0 view .LVU30
+ 114 0076 4FF48043 		mov	r3, #16384
+ 115 007a ADF81030 		strh	r3, [sp, #16]	@ movhi
+  32:core/Src/my_inits.c ****     I2C_InitStructure.I2C_ClockSpeed = 400000;
+ 116              		.loc 1 32 5 is_stmt 1 view .LVU31
+ 117              		.loc 1 32 38 is_stmt 0 view .LVU32
+ 118 007e 084B     		ldr	r3, .L3+8
+ 119 0080 0193     		str	r3, [sp, #4]
+  33:core/Src/my_inits.c ****     I2C_Init(I2C2, &I2C_InitStructure);
+ 120              		.loc 1 33 5 is_stmt 1 view .LVU33
+ 121 0082 084C     		ldr	r4, .L3+12
+ 122 0084 01A9     		add	r1, sp, #4
+ 123 0086 2046     		mov	r0, r4
+ 124 0088 FFF7FEFF 		bl	I2C_Init
+ 125              	.LVL6:
+  34:core/Src/my_inits.c ****     I2C_Cmd(I2C2, ENABLE);
+ 126              		.loc 1 34 5 view .LVU34
+ 127 008c 0121     		movs	r1, #1
+ 128 008e 2046     		mov	r0, r4
+ 129 0090 FFF7FEFF 		bl	I2C_Cmd
+ 130              	.LVL7:
+  35:core/Src/my_inits.c **** }
+ 131              		.loc 1 35 1 is_stmt 0 view .LVU35
+ 132 0094 06B0     		add	sp, sp, #24
+ 133              	.LCFI2:
+ 134              		.cfi_def_cfa_offset 16
+ 135              		@ sp needed
+ 136 0096 70BD     		pop	{r4, r5, r6, pc}
+ 137              	.L4:
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 4
+
+
+ 138              		.align	2
+ 139              	.L3:
+ 140 0098 00080140 		.word	1073809408
+ 141 009c 000C0140 		.word	1073810432
+ 142 00a0 801A0600 		.word	400000
+ 143 00a4 00580040 		.word	1073764352
+ 144              		.cfi_endproc
+ 145              	.LFE56:
+ 147              		.section	.text.init_my_clock,"ax",%progbits
+ 148              		.align	1
+ 149              		.global	init_my_clock
+ 150              		.syntax unified
+ 151              		.thumb
+ 152              		.thumb_func
+ 153              		.fpu softvfp
+ 155              	init_my_clock:
+ 156              	.LFB57:
+  36:core/Src/my_inits.c **** 
+  37:core/Src/my_inits.c **** void init_my_clock()
+  38:core/Src/my_inits.c **** {
+ 157              		.loc 1 38 1 is_stmt 1 view -0
+ 158              		.cfi_startproc
+ 159              		@ args = 0, pretend = 0, frame = 0
+ 160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 161 0000 08B5     		push	{r3, lr}
+ 162              	.LCFI3:
+ 163              		.cfi_def_cfa_offset 8
+ 164              		.cfi_offset 3, -8
+ 165              		.cfi_offset 14, -4
+  39:core/Src/my_inits.c **** 
+  40:core/Src/my_inits.c ****   RCC_DeInit();
+ 166              		.loc 1 40 3 view .LVU37
+ 167 0002 FFF7FEFF 		bl	RCC_DeInit
+ 168              	.LVL8:
+  41:core/Src/my_inits.c ****   RCC_HSEConfig(RCC_HSE_ON);
+ 169              		.loc 1 41 3 view .LVU38
+ 170 0006 4FF48030 		mov	r0, #65536
+ 171 000a FFF7FEFF 		bl	RCC_HSEConfig
+ 172              	.LVL9:
+  42:core/Src/my_inits.c ****   HSEStartUpStatus = RCC_WaitForHSEStartUp();
+ 173              		.loc 1 42 3 view .LVU39
+ 174              		.loc 1 42 22 is_stmt 0 view .LVU40
+ 175 000e FFF7FEFF 		bl	RCC_WaitForHSEStartUp
+ 176              	.LVL10:
+ 177              		.loc 1 42 20 view .LVU41
+ 178 0012 154B     		ldr	r3, .L13
+ 179 0014 1870     		strb	r0, [r3]
+  43:core/Src/my_inits.c **** 
+  44:core/Src/my_inits.c ****   if (HSEStartUpStatus == SUCCESS)
+ 180              		.loc 1 44 3 is_stmt 1 view .LVU42
+ 181              		.loc 1 44 6 is_stmt 0 view .LVU43
+ 182 0016 0128     		cmp	r0, #1
+ 183 0018 00D0     		beq	.L12
+ 184              	.L6:
+  45:core/Src/my_inits.c ****   {
+  46:core/Src/my_inits.c ****     FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+  47:core/Src/my_inits.c ****     FLASH_SetLatency(FLASH_Latency_2);
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 5
+
+
+  48:core/Src/my_inits.c ****     RCC_HCLKConfig(RCC_SYSCLK_Div1); 
+  49:core/Src/my_inits.c ****     RCC_PCLK2Config(RCC_HCLK_Div1); 
+  50:core/Src/my_inits.c ****     RCC_PCLK1Config(RCC_HCLK_Div2);
+  51:core/Src/my_inits.c **** 
+  52:core/Src/my_inits.c **** #ifdef STM32F10X_CL	
+  53:core/Src/my_inits.c ****     RCC_PREDIV2Config(RCC_PREDIV2_Div5);
+  54:core/Src/my_inits.c ****     RCC_PLL2Config(RCC_PLL2Mul_8);
+  55:core/Src/my_inits.c ****     RCC_PLL2Cmd(ENABLE);
+  56:core/Src/my_inits.c ****     while (RCC_GetFlagStatus(RCC_FLAG_PLL2RDY) == RESET)
+  57:core/Src/my_inits.c ****     {}
+  58:core/Src/my_inits.c ****     RCC_PREDIV1Config(RCC_PREDIV1_Source_PLL2, RCC_PREDIV1_Div5);
+  59:core/Src/my_inits.c ****     RCC_PLLConfig(RCC_PLLSource_PREDIV1, RCC_PLLMul_9);
+  60:core/Src/my_inits.c **** #else
+  61:core/Src/my_inits.c ****     // PLLCLK = 8MHz * 9 = 72 MHz
+  62:core/Src/my_inits.c ****     RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9);
+  63:core/Src/my_inits.c **** #endif
+  64:core/Src/my_inits.c **** 
+  65:core/Src/my_inits.c ****     RCC_PLLCmd(ENABLE);
+  66:core/Src/my_inits.c **** 
+  67:core/Src/my_inits.c ****     while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+  68:core/Src/my_inits.c ****     {
+  69:core/Src/my_inits.c ****     }
+  70:core/Src/my_inits.c **** 
+  71:core/Src/my_inits.c ****     RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+  72:core/Src/my_inits.c **** 
+  73:core/Src/my_inits.c ****     while(RCC_GetSYSCLKSource() != 0x08)
+  74:core/Src/my_inits.c ****     {
+  75:core/Src/my_inits.c ****     }
+  76:core/Src/my_inits.c ****   }
+  77:core/Src/my_inits.c ****   else
+  78:core/Src/my_inits.c ****   {
+  79:core/Src/my_inits.c ****     while (1)
+ 185              		.loc 1 79 5 is_stmt 1 discriminator 1 view .LVU44
+  80:core/Src/my_inits.c ****     {
+  81:core/Src/my_inits.c ****     }
+ 186              		.loc 1 81 5 discriminator 1 view .LVU45
+  79:core/Src/my_inits.c ****     {
+ 187              		.loc 1 79 11 discriminator 1 view .LVU46
+ 188 001a FEE7     		b	.L6
+ 189              	.L12:
+  46:core/Src/my_inits.c ****     FLASH_SetLatency(FLASH_Latency_2);
+ 190              		.loc 1 46 5 view .LVU47
+ 191 001c 1020     		movs	r0, #16
+ 192 001e FFF7FEFF 		bl	FLASH_PrefetchBufferCmd
+ 193              	.LVL11:
+  47:core/Src/my_inits.c ****     RCC_HCLKConfig(RCC_SYSCLK_Div1); 
+ 194              		.loc 1 47 5 view .LVU48
+ 195 0022 0220     		movs	r0, #2
+ 196 0024 FFF7FEFF 		bl	FLASH_SetLatency
+ 197              	.LVL12:
+  48:core/Src/my_inits.c ****     RCC_PCLK2Config(RCC_HCLK_Div1); 
+ 198              		.loc 1 48 5 view .LVU49
+ 199 0028 0020     		movs	r0, #0
+ 200 002a FFF7FEFF 		bl	RCC_HCLKConfig
+ 201              	.LVL13:
+  49:core/Src/my_inits.c ****     RCC_PCLK1Config(RCC_HCLK_Div2);
+ 202              		.loc 1 49 5 view .LVU50
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 6
+
+
+ 203 002e 0020     		movs	r0, #0
+ 204 0030 FFF7FEFF 		bl	RCC_PCLK2Config
+ 205              	.LVL14:
+  50:core/Src/my_inits.c **** 
+ 206              		.loc 1 50 5 view .LVU51
+ 207 0034 4FF48060 		mov	r0, #1024
+ 208 0038 FFF7FEFF 		bl	RCC_PCLK1Config
+ 209              	.LVL15:
+  62:core/Src/my_inits.c **** #endif
+ 210              		.loc 1 62 5 view .LVU52
+ 211 003c 4FF4E011 		mov	r1, #1835008
+ 212 0040 4FF48030 		mov	r0, #65536
+ 213 0044 FFF7FEFF 		bl	RCC_PLLConfig
+ 214              	.LVL16:
+  65:core/Src/my_inits.c **** 
+ 215              		.loc 1 65 5 view .LVU53
+ 216 0048 0120     		movs	r0, #1
+ 217 004a FFF7FEFF 		bl	RCC_PLLCmd
+ 218              	.LVL17:
+  67:core/Src/my_inits.c ****     {
+ 219              		.loc 1 67 5 view .LVU54
+ 220              	.L7:
+  69:core/Src/my_inits.c **** 
+ 221              		.loc 1 69 5 discriminator 1 view .LVU55
+  67:core/Src/my_inits.c ****     {
+ 222              		.loc 1 67 11 discriminator 1 view .LVU56
+  67:core/Src/my_inits.c ****     {
+ 223              		.loc 1 67 12 is_stmt 0 discriminator 1 view .LVU57
+ 224 004e 3920     		movs	r0, #57
+ 225 0050 FFF7FEFF 		bl	RCC_GetFlagStatus
+ 226              	.LVL18:
+  67:core/Src/my_inits.c ****     {
+ 227              		.loc 1 67 11 discriminator 1 view .LVU58
+ 228 0054 0028     		cmp	r0, #0
+ 229 0056 FAD0     		beq	.L7
+  71:core/Src/my_inits.c **** 
+ 230              		.loc 1 71 5 is_stmt 1 view .LVU59
+ 231 0058 0220     		movs	r0, #2
+ 232 005a FFF7FEFF 		bl	RCC_SYSCLKConfig
+ 233              	.LVL19:
+  73:core/Src/my_inits.c ****     {
+ 234              		.loc 1 73 5 view .LVU60
+ 235              	.L8:
+  75:core/Src/my_inits.c ****   }
+ 236              		.loc 1 75 5 discriminator 1 view .LVU61
+  73:core/Src/my_inits.c ****     {
+ 237              		.loc 1 73 10 discriminator 1 view .LVU62
+  73:core/Src/my_inits.c ****     {
+ 238              		.loc 1 73 11 is_stmt 0 discriminator 1 view .LVU63
+ 239 005e FFF7FEFF 		bl	RCC_GetSYSCLKSource
+ 240              	.LVL20:
+  73:core/Src/my_inits.c ****     {
+ 241              		.loc 1 73 10 discriminator 1 view .LVU64
+ 242 0062 0828     		cmp	r0, #8
+ 243 0064 FBD1     		bne	.L8
+  82:core/Src/my_inits.c ****   }
+  83:core/Src/my_inits.c **** }
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 7
+
+
+ 244              		.loc 1 83 1 view .LVU65
+ 245 0066 08BD     		pop	{r3, pc}
+ 246              	.L14:
+ 247              		.align	2
+ 248              	.L13:
+ 249 0068 00000000 		.word	.LANCHOR0
+ 250              		.cfi_endproc
+ 251              	.LFE57:
+ 253              		.section	.text.init_usb_clock,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	init_usb_clock
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 259              		.fpu softvfp
+ 261              	init_usb_clock:
+ 262              	.LFB58:
+  84:core/Src/my_inits.c **** 
+  85:core/Src/my_inits.c **** void init_usb_clock()
+  86:core/Src/my_inits.c **** {
+ 263              		.loc 1 86 1 is_stmt 1 view -0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 267 0000 08B5     		push	{r3, lr}
+ 268              	.LCFI4:
+ 269              		.cfi_def_cfa_offset 8
+ 270              		.cfi_offset 3, -8
+ 271              		.cfi_offset 14, -4
+  87:core/Src/my_inits.c **** 	RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
+ 272              		.loc 1 87 2 view .LVU67
+ 273 0002 0020     		movs	r0, #0
+ 274 0004 FFF7FEFF 		bl	RCC_USBCLKConfig
+ 275              	.LVL21:
+  88:core/Src/my_inits.c ****   	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
+ 276              		.loc 1 88 4 view .LVU68
+ 277 0008 0121     		movs	r1, #1
+ 278 000a 4FF40000 		mov	r0, #8388608
+ 279 000e FFF7FEFF 		bl	RCC_APB1PeriphClockCmd
+ 280              	.LVL22:
+  89:core/Src/my_inits.c **** }
+ 281              		.loc 1 89 1 is_stmt 0 view .LVU69
+ 282 0012 08BD     		pop	{r3, pc}
+ 283              		.cfi_endproc
+ 284              	.LFE58:
+ 286              		.global	HSEStartUpStatus
+ 287              		.section	.bss.HSEStartUpStatus,"aw",%nobits
+ 288              		.set	.LANCHOR0,. + 0
+ 291              	HSEStartUpStatus:
+ 292 0000 00       		.space	1
+ 293              		.text
+ 294              	.Letext0:
+ 295              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 296              		.file 3 "cmsis_boot/Inc/stm32f10x.h"
+ 297              		.file 4 "stm_lib/Inc/stm32f10x_gpio.h"
+ 298              		.file 5 "stm_lib/Inc/stm32f10x_i2c.h"
+ 299              		.file 6 "stm_lib/Inc/stm32f10x_rcc.h"
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 8
+
+
+ 300              		.file 7 "stm_lib/Inc/stm32f10x_flash.h"
+ARM GAS  /tmp/cc3Aq1Hb.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 my_inits.c
+     /tmp/cc3Aq1Hb.s:16     .text.init_my_gpio:0000000000000000 $t
+     /tmp/cc3Aq1Hb.s:24     .text.init_my_gpio:0000000000000000 init_my_gpio
+     /tmp/cc3Aq1Hb.s:140    .text.init_my_gpio:0000000000000098 $d
+     /tmp/cc3Aq1Hb.s:148    .text.init_my_clock:0000000000000000 $t
+     /tmp/cc3Aq1Hb.s:155    .text.init_my_clock:0000000000000000 init_my_clock
+     /tmp/cc3Aq1Hb.s:249    .text.init_my_clock:0000000000000068 $d
+     /tmp/cc3Aq1Hb.s:254    .text.init_usb_clock:0000000000000000 $t
+     /tmp/cc3Aq1Hb.s:261    .text.init_usb_clock:0000000000000000 init_usb_clock
+     /tmp/cc3Aq1Hb.s:291    .bss.HSEStartUpStatus:0000000000000000 HSEStartUpStatus
+     /tmp/cc3Aq1Hb.s:292    .bss.HSEStartUpStatus:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+RCC_APB2PeriphClockCmd
+GPIO_Init
+GPIO_SetBits
+RCC_APB1PeriphClockCmd
+I2C_StructInit
+I2C_Init
+I2C_Cmd
+RCC_DeInit
+RCC_HSEConfig
+RCC_WaitForHSEStartUp
+FLASH_PrefetchBufferCmd
+FLASH_SetLatency
+RCC_HCLKConfig
+RCC_PCLK2Config
+RCC_PCLK1Config
+RCC_PLLConfig
+RCC_PLLCmd
+RCC_GetFlagStatus
+RCC_SYSCLKConfig
+RCC_GetSYSCLKSource
+RCC_USBCLKConfig

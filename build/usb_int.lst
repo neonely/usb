@@ -1,0 +1,941 @@
+ARM GAS  /tmp/ccAov5f1.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usb_int.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.CTR_LP,"ax",%progbits
+  16              		.align	1
+  17              		.global	CTR_LP
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	CTR_LP:
+  25              	.LFB56:
+  26              		.file 1 "usb_driver/Src/usb_int.c"
+   1:usb_driver/Src/usb_int.c **** /**
+   2:usb_driver/Src/usb_int.c ****   ******************************************************************************
+   3:usb_driver/Src/usb_int.c ****   * @file    usb_int.c
+   4:usb_driver/Src/usb_int.c ****   * @author  MCD Application Team
+   5:usb_driver/Src/usb_int.c ****   * @version V4.0.0
+   6:usb_driver/Src/usb_int.c ****   * @date    28-August-2012
+   7:usb_driver/Src/usb_int.c ****   * @brief   Endpoint CTR (Low and High) interrupt's service routines
+   8:usb_driver/Src/usb_int.c ****   ******************************************************************************
+   9:usb_driver/Src/usb_int.c ****   * @attention
+  10:usb_driver/Src/usb_int.c ****   *
+  11:usb_driver/Src/usb_int.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  12:usb_driver/Src/usb_int.c ****   *
+  13:usb_driver/Src/usb_int.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  14:usb_driver/Src/usb_int.c ****   * You may not use this file except in compliance with the License.
+  15:usb_driver/Src/usb_int.c ****   * You may obtain a copy of the License at:
+  16:usb_driver/Src/usb_int.c ****   *
+  17:usb_driver/Src/usb_int.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  18:usb_driver/Src/usb_int.c ****   *
+  19:usb_driver/Src/usb_int.c ****   * Unless required by applicable law or agreed to in writing, software 
+  20:usb_driver/Src/usb_int.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  21:usb_driver/Src/usb_int.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  22:usb_driver/Src/usb_int.c ****   * See the License for the specific language governing permissions and
+  23:usb_driver/Src/usb_int.c ****   * limitations under the License.
+  24:usb_driver/Src/usb_int.c ****   *
+  25:usb_driver/Src/usb_int.c ****   ******************************************************************************
+  26:usb_driver/Src/usb_int.c ****   */
+  27:usb_driver/Src/usb_int.c **** 
+  28:usb_driver/Src/usb_int.c **** /* Includes ------------------------------------------------------------------*/
+  29:usb_driver/Src/usb_int.c **** #include "usb_lib.h"
+  30:usb_driver/Src/usb_int.c **** 
+  31:usb_driver/Src/usb_int.c **** /* Private typedef -----------------------------------------------------------*/
+  32:usb_driver/Src/usb_int.c **** /* Private define ------------------------------------------------------------*/
+ARM GAS  /tmp/ccAov5f1.s 			page 2
+
+
+  33:usb_driver/Src/usb_int.c **** /* Private macro -------------------------------------------------------------*/
+  34:usb_driver/Src/usb_int.c **** /* Private variables ---------------------------------------------------------*/
+  35:usb_driver/Src/usb_int.c **** __IO uint16_t SaveRState;
+  36:usb_driver/Src/usb_int.c **** __IO uint16_t SaveTState;
+  37:usb_driver/Src/usb_int.c **** 
+  38:usb_driver/Src/usb_int.c **** /* Extern variables ----------------------------------------------------------*/
+  39:usb_driver/Src/usb_int.c **** extern void (*pEpInt_IN[7])(void);    /*  Handles IN  interrupts   */
+  40:usb_driver/Src/usb_int.c **** extern void (*pEpInt_OUT[7])(void);   /*  Handles OUT interrupts   */
+  41:usb_driver/Src/usb_int.c **** 
+  42:usb_driver/Src/usb_int.c **** /* Private function prototypes -----------------------------------------------*/
+  43:usb_driver/Src/usb_int.c **** /* Private functions ---------------------------------------------------------*/
+  44:usb_driver/Src/usb_int.c **** 
+  45:usb_driver/Src/usb_int.c **** /*******************************************************************************
+  46:usb_driver/Src/usb_int.c **** * Function Name  : CTR_LP.
+  47:usb_driver/Src/usb_int.c **** * Description    : Low priority Endpoint Correct Transfer interrupt's service
+  48:usb_driver/Src/usb_int.c **** *                  routine.
+  49:usb_driver/Src/usb_int.c **** * Input          : None.
+  50:usb_driver/Src/usb_int.c **** * Output         : None.
+  51:usb_driver/Src/usb_int.c **** * Return         : None.
+  52:usb_driver/Src/usb_int.c **** *******************************************************************************/
+  53:usb_driver/Src/usb_int.c **** void CTR_LP(void)
+  54:usb_driver/Src/usb_int.c **** {
+  27              		.loc 1 54 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 10B5     		push	{r4, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  36 0002 82B0     		sub	sp, sp, #8
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 16
+  55:usb_driver/Src/usb_int.c ****   __IO uint16_t wEPVal = 0;
+  39              		.loc 1 55 3 view .LVU1
+  40              		.loc 1 55 17 is_stmt 0 view .LVU2
+  41 0004 0023     		movs	r3, #0
+  42 0006 ADF80630 		strh	r3, [sp, #6]	@ movhi
+  56:usb_driver/Src/usb_int.c ****   /* stay in loop while pending interrupts */
+  57:usb_driver/Src/usb_int.c ****   while (((wIstr = _GetISTR()) & ISTR_CTR) != 0)
+  43              		.loc 1 57 3 is_stmt 1 view .LVU3
+  44              		.loc 1 57 9 is_stmt 0 view .LVU4
+  45 000a 9BE0     		b	.L2
+  46              	.LVL0:
+  47              	.L24:
+  58:usb_driver/Src/usb_int.c ****   {
+  59:usb_driver/Src/usb_int.c ****     /* extract highest priority endpoint number */
+  60:usb_driver/Src/usb_int.c ****     EPindex = (uint8_t)(wIstr & ISTR_EP_ID);
+  61:usb_driver/Src/usb_int.c ****     if (EPindex == 0)
+  62:usb_driver/Src/usb_int.c ****     {
+  63:usb_driver/Src/usb_int.c ****       /* Decode and service control endpoint interrupt */
+  64:usb_driver/Src/usb_int.c ****       /* calling related service routine */
+  65:usb_driver/Src/usb_int.c ****       /* (Setup0_Process, In0_Process, Out0_Process) */
+  66:usb_driver/Src/usb_int.c **** 
+  67:usb_driver/Src/usb_int.c ****       /* save RX & TX status */
+  68:usb_driver/Src/usb_int.c ****       /* and set both to NAK */
+ARM GAS  /tmp/ccAov5f1.s 			page 3
+
+
+  69:usb_driver/Src/usb_int.c ****       
+  70:usb_driver/Src/usb_int.c **** 	    SaveRState = _GetENDPOINT(ENDP0);
+  71:usb_driver/Src/usb_int.c **** 	    SaveTState = SaveRState & EPTX_STAT;
+  72:usb_driver/Src/usb_int.c **** 	    SaveRState &=  EPRX_STAT;	
+  73:usb_driver/Src/usb_int.c **** 
+  74:usb_driver/Src/usb_int.c **** 	    _SetEPRxTxStatus(ENDP0,EP_RX_NAK,EP_TX_NAK);
+  75:usb_driver/Src/usb_int.c **** 
+  76:usb_driver/Src/usb_int.c ****       /* DIR bit = origin of the interrupt */
+  77:usb_driver/Src/usb_int.c **** 
+  78:usb_driver/Src/usb_int.c ****       if ((wIstr & ISTR_DIR) == 0)
+  79:usb_driver/Src/usb_int.c ****       {
+  80:usb_driver/Src/usb_int.c ****         /* DIR = 0 */
+  81:usb_driver/Src/usb_int.c **** 
+  82:usb_driver/Src/usb_int.c ****         /* DIR = 0      => IN  int */
+  83:usb_driver/Src/usb_int.c ****         /* DIR = 0 implies that (EP_CTR_TX = 1) always  */
+  84:usb_driver/Src/usb_int.c **** 
+  85:usb_driver/Src/usb_int.c ****         _ClearEP_CTR_TX(ENDP0);
+  48              		.loc 1 85 9 is_stmt 1 view .LVU5
+  49 000c 1446     		mov	r4, r2
+  50 000e D2F8003C 		ldr	r3, [r2, #3072]
+  51 0012 23F4E143 		bic	r3, r3, #28800
+  52 0016 23F07003 		bic	r3, r3, #112
+  53 001a 1B04     		lsls	r3, r3, #16
+  54 001c 1B0C     		lsrs	r3, r3, #16
+  55 001e C2F8003C 		str	r3, [r2, #3072]
+  86:usb_driver/Src/usb_int.c ****         In0_Process();
+  56              		.loc 1 86 9 view .LVU6
+  57 0022 FFF7FEFF 		bl	In0_Process
+  58              	.LVL1:
+  59              	.LBB2:
+  87:usb_driver/Src/usb_int.c **** 
+  88:usb_driver/Src/usb_int.c ****            /* before terminate set Tx & Rx status */
+  89:usb_driver/Src/usb_int.c **** 
+  90:usb_driver/Src/usb_int.c ****             _SetEPRxTxStatus(ENDP0,SaveRState,SaveTState);
+  60              		.loc 1 90 13 view .LVU7
+  61              		.loc 1 90 13 view .LVU8
+  62 0026 D4F8003C 		ldr	r3, [r4, #3072]
+  63 002a 23F48043 		bic	r3, r3, #16384
+  64 002e 23F04003 		bic	r3, r3, #64
+  65 0032 1B04     		lsls	r3, r3, #16
+  66 0034 1B0C     		lsrs	r3, r3, #16
+  67              	.LVL2:
+  68              		.loc 1 90 13 view .LVU9
+  69 0036 8B4A     		ldr	r2, .L26
+  70 0038 1288     		ldrh	r2, [r2]
+  71 003a 12F4805F 		tst	r2, #4096
+  72 003e 01D0     		beq	.L5
+  73              		.loc 1 90 13 discriminator 1 view .LVU10
+  74 0040 83F48053 		eor	r3, r3, #4096
+  75              	.LVL3:
+  76              	.L5:
+  77              		.loc 1 90 13 discriminator 3 view .LVU11
+  78 0044 874A     		ldr	r2, .L26
+  79 0046 1288     		ldrh	r2, [r2]
+  80 0048 12F4005F 		tst	r2, #8192
+  81 004c 01D0     		beq	.L6
+  82              		.loc 1 90 13 discriminator 4 view .LVU12
+ARM GAS  /tmp/ccAov5f1.s 			page 4
+
+
+  83 004e 83F40053 		eor	r3, r3, #8192
+  84              	.LVL4:
+  85              	.L6:
+  86              		.loc 1 90 13 discriminator 6 view .LVU13
+  87 0052 854A     		ldr	r2, .L26+4
+  88 0054 1288     		ldrh	r2, [r2]
+  89 0056 12F0100F 		tst	r2, #16
+  90 005a 01D0     		beq	.L7
+  91              		.loc 1 90 13 discriminator 7 view .LVU14
+  92 005c 83F01003 		eor	r3, r3, #16
+  93              	.LVL5:
+  94              	.L7:
+  95              		.loc 1 90 13 discriminator 9 view .LVU15
+  96 0060 814A     		ldr	r2, .L26+4
+  97 0062 1288     		ldrh	r2, [r2]
+  98 0064 12F0200F 		tst	r2, #32
+  99 0068 01D0     		beq	.L8
+ 100              		.loc 1 90 13 discriminator 10 view .LVU16
+ 101 006a 83F02003 		eor	r3, r3, #32
+ 102              	.LVL6:
+ 103              	.L8:
+ 104              		.loc 1 90 13 discriminator 12 view .LVU17
+ 105 006e 9BB2     		uxth	r3, r3
+ 106              	.LVL7:
+ 107              		.loc 1 90 13 is_stmt 0 discriminator 12 view .LVU18
+ 108 0070 43F40043 		orr	r3, r3, #32768
+ 109 0074 43F08003 		orr	r3, r3, #128
+ 110 0078 7C4A     		ldr	r2, .L26+8
+ 111 007a C2F8003C 		str	r3, [r2, #3072]
+ 112              	.LBE2:
+ 113              		.loc 1 90 58 is_stmt 1 discriminator 12 view .LVU19
+  91:usb_driver/Src/usb_int.c **** 		  return;
+ 114              		.loc 1 91 5 discriminator 12 view .LVU20
+ 115              	.L1:
+  92:usb_driver/Src/usb_int.c ****       }
+  93:usb_driver/Src/usb_int.c ****       else
+  94:usb_driver/Src/usb_int.c ****       {
+  95:usb_driver/Src/usb_int.c ****         /* DIR = 1 */
+  96:usb_driver/Src/usb_int.c **** 
+  97:usb_driver/Src/usb_int.c ****         /* DIR = 1 & CTR_RX       => SETUP or OUT int */
+  98:usb_driver/Src/usb_int.c ****         /* DIR = 1 & (CTR_TX | CTR_RX) => 2 int pending */
+  99:usb_driver/Src/usb_int.c **** 
+ 100:usb_driver/Src/usb_int.c ****         wEPVal = _GetENDPOINT(ENDP0);
+ 101:usb_driver/Src/usb_int.c ****         
+ 102:usb_driver/Src/usb_int.c ****         if ((wEPVal &EP_SETUP) != 0)
+ 103:usb_driver/Src/usb_int.c ****         {
+ 104:usb_driver/Src/usb_int.c ****           _ClearEP_CTR_RX(ENDP0); /* SETUP bit kept frozen while CTR_RX = 1 */
+ 105:usb_driver/Src/usb_int.c ****           Setup0_Process();
+ 106:usb_driver/Src/usb_int.c ****           /* before terminate set Tx & Rx status */
+ 107:usb_driver/Src/usb_int.c **** 
+ 108:usb_driver/Src/usb_int.c **** 		      _SetEPRxTxStatus(ENDP0,SaveRState,SaveTState);
+ 109:usb_driver/Src/usb_int.c ****           return;
+ 110:usb_driver/Src/usb_int.c ****         }
+ 111:usb_driver/Src/usb_int.c **** 
+ 112:usb_driver/Src/usb_int.c ****         else if ((wEPVal & EP_CTR_RX) != 0)
+ 113:usb_driver/Src/usb_int.c ****         {
+ 114:usb_driver/Src/usb_int.c ****           _ClearEP_CTR_RX(ENDP0);
+ARM GAS  /tmp/ccAov5f1.s 			page 5
+
+
+ 115:usb_driver/Src/usb_int.c ****           Out0_Process();
+ 116:usb_driver/Src/usb_int.c ****           /* before terminate set Tx & Rx status */
+ 117:usb_driver/Src/usb_int.c ****      
+ 118:usb_driver/Src/usb_int.c **** 		     _SetEPRxTxStatus(ENDP0,SaveRState,SaveTState);
+ 119:usb_driver/Src/usb_int.c ****           return;
+ 120:usb_driver/Src/usb_int.c ****         }
+ 121:usb_driver/Src/usb_int.c ****       }
+ 122:usb_driver/Src/usb_int.c ****     }/* if(EPindex == 0) */
+ 123:usb_driver/Src/usb_int.c ****     else
+ 124:usb_driver/Src/usb_int.c ****     {
+ 125:usb_driver/Src/usb_int.c ****       /* Decode and service non control endpoints interrupt  */
+ 126:usb_driver/Src/usb_int.c **** 
+ 127:usb_driver/Src/usb_int.c ****       /* process related endpoint register */
+ 128:usb_driver/Src/usb_int.c ****       wEPVal = _GetENDPOINT(EPindex);
+ 129:usb_driver/Src/usb_int.c ****       if ((wEPVal & EP_CTR_RX) != 0)
+ 130:usb_driver/Src/usb_int.c ****       {
+ 131:usb_driver/Src/usb_int.c ****         /* clear int flag */
+ 132:usb_driver/Src/usb_int.c ****         _ClearEP_CTR_RX(EPindex);
+ 133:usb_driver/Src/usb_int.c **** 
+ 134:usb_driver/Src/usb_int.c ****         /* call OUT service function */
+ 135:usb_driver/Src/usb_int.c ****         (*pEpInt_OUT[EPindex-1])();
+ 136:usb_driver/Src/usb_int.c **** 
+ 137:usb_driver/Src/usb_int.c ****       } /* if((wEPVal & EP_CTR_RX) */
+ 138:usb_driver/Src/usb_int.c **** 
+ 139:usb_driver/Src/usb_int.c ****       if ((wEPVal & EP_CTR_TX) != 0)
+ 140:usb_driver/Src/usb_int.c ****       {
+ 141:usb_driver/Src/usb_int.c ****         /* clear int flag */
+ 142:usb_driver/Src/usb_int.c ****         _ClearEP_CTR_TX(EPindex);
+ 143:usb_driver/Src/usb_int.c **** 
+ 144:usb_driver/Src/usb_int.c ****         /* call IN service function */
+ 145:usb_driver/Src/usb_int.c ****         (*pEpInt_IN[EPindex-1])();
+ 146:usb_driver/Src/usb_int.c ****       } /* if((wEPVal & EP_CTR_TX) != 0) */
+ 147:usb_driver/Src/usb_int.c **** 
+ 148:usb_driver/Src/usb_int.c ****     }/* if(EPindex == 0) else */
+ 149:usb_driver/Src/usb_int.c **** 
+ 150:usb_driver/Src/usb_int.c ****   }/* while(...) */
+ 151:usb_driver/Src/usb_int.c **** }
+ 116              		.loc 1 151 1 is_stmt 0 view .LVU21
+ 117 007e 02B0     		add	sp, sp, #8
+ 118              	.LCFI2:
+ 119              		.cfi_remember_state
+ 120              		.cfi_def_cfa_offset 8
+ 121              		@ sp needed
+ 122 0080 10BD     		pop	{r4, pc}
+ 123              	.L25:
+ 124              	.LCFI3:
+ 125              		.cfi_restore_state
+ 104:usb_driver/Src/usb_int.c ****           Setup0_Process();
+ 126              		.loc 1 104 11 is_stmt 1 view .LVU22
+ 127 0082 7A4C     		ldr	r4, .L26+8
+ 128 0084 D4F8003C 		ldr	r3, [r4, #3072]
+ 129 0088 23F07003 		bic	r3, r3, #112
+ 130 008c 1B05     		lsls	r3, r3, #20
+ 131 008e 1B0D     		lsrs	r3, r3, #20
+ 132 0090 C4F8003C 		str	r3, [r4, #3072]
+ 105:usb_driver/Src/usb_int.c ****           /* before terminate set Tx & Rx status */
+ 133              		.loc 1 105 11 view .LVU23
+ARM GAS  /tmp/ccAov5f1.s 			page 6
+
+
+ 134 0094 FFF7FEFF 		bl	Setup0_Process
+ 135              	.LVL8:
+ 136              	.LBB3:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 137              		.loc 1 108 9 view .LVU24
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 138              		.loc 1 108 9 view .LVU25
+ 139 0098 D4F8003C 		ldr	r3, [r4, #3072]
+ 140 009c 23F48043 		bic	r3, r3, #16384
+ 141 00a0 23F04003 		bic	r3, r3, #64
+ 142 00a4 1B04     		lsls	r3, r3, #16
+ 143 00a6 1B0C     		lsrs	r3, r3, #16
+ 144              	.LVL9:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 145              		.loc 1 108 9 view .LVU26
+ 146 00a8 6E4A     		ldr	r2, .L26
+ 147 00aa 1288     		ldrh	r2, [r2]
+ 148 00ac 12F4805F 		tst	r2, #4096
+ 149 00b0 01D0     		beq	.L11
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 150              		.loc 1 108 9 discriminator 1 view .LVU27
+ 151 00b2 83F48053 		eor	r3, r3, #4096
+ 152              	.LVL10:
+ 153              	.L11:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 154              		.loc 1 108 9 discriminator 3 view .LVU28
+ 155 00b6 6B4A     		ldr	r2, .L26
+ 156 00b8 1288     		ldrh	r2, [r2]
+ 157 00ba 12F4005F 		tst	r2, #8192
+ 158 00be 01D0     		beq	.L12
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 159              		.loc 1 108 9 discriminator 4 view .LVU29
+ 160 00c0 83F40053 		eor	r3, r3, #8192
+ 161              	.LVL11:
+ 162              	.L12:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 163              		.loc 1 108 9 discriminator 6 view .LVU30
+ 164 00c4 684A     		ldr	r2, .L26+4
+ 165 00c6 1288     		ldrh	r2, [r2]
+ 166 00c8 12F0100F 		tst	r2, #16
+ 167 00cc 01D0     		beq	.L13
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 168              		.loc 1 108 9 discriminator 7 view .LVU31
+ 169 00ce 83F01003 		eor	r3, r3, #16
+ 170              	.LVL12:
+ 171              	.L13:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 172              		.loc 1 108 9 discriminator 9 view .LVU32
+ 173 00d2 654A     		ldr	r2, .L26+4
+ 174 00d4 1288     		ldrh	r2, [r2]
+ 175 00d6 12F0200F 		tst	r2, #32
+ 176 00da 01D0     		beq	.L14
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 177              		.loc 1 108 9 discriminator 10 view .LVU33
+ 178 00dc 83F02003 		eor	r3, r3, #32
+ 179              	.LVL13:
+ 180              	.L14:
+ARM GAS  /tmp/ccAov5f1.s 			page 7
+
+
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 181              		.loc 1 108 9 discriminator 12 view .LVU34
+ 182 00e0 9BB2     		uxth	r3, r3
+ 183              	.LVL14:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 184              		.loc 1 108 9 is_stmt 0 discriminator 12 view .LVU35
+ 185 00e2 43F40043 		orr	r3, r3, #32768
+ 186 00e6 43F08003 		orr	r3, r3, #128
+ 187 00ea 604A     		ldr	r2, .L26+8
+ 188 00ec C2F8003C 		str	r3, [r2, #3072]
+ 189              	.LBE3:
+ 108:usb_driver/Src/usb_int.c ****           return;
+ 190              		.loc 1 108 54 is_stmt 1 discriminator 12 view .LVU36
+ 109:usb_driver/Src/usb_int.c ****         }
+ 191              		.loc 1 109 11 discriminator 12 view .LVU37
+ 192 00f0 C5E7     		b	.L1
+ 193              	.L3:
+ 128:usb_driver/Src/usb_int.c ****       if ((wEPVal & EP_CTR_RX) != 0)
+ 194              		.loc 1 128 7 view .LVU38
+ 128:usb_driver/Src/usb_int.c ****       if ((wEPVal & EP_CTR_RX) != 0)
+ 195              		.loc 1 128 16 is_stmt 0 view .LVU39
+ 196 00f2 9B00     		lsls	r3, r3, #2
+ 197 00f4 03F18043 		add	r3, r3, #1073741824
+ 198 00f8 03F5B843 		add	r3, r3, #23552
+ 199 00fc 1A68     		ldr	r2, [r3]
+ 200 00fe 92B2     		uxth	r2, r2
+ 128:usb_driver/Src/usb_int.c ****       if ((wEPVal & EP_CTR_RX) != 0)
+ 201              		.loc 1 128 14 view .LVU40
+ 202 0100 ADF80620 		strh	r2, [sp, #6]	@ movhi
+ 129:usb_driver/Src/usb_int.c ****       {
+ 203              		.loc 1 129 7 is_stmt 1 view .LVU41
+ 129:usb_driver/Src/usb_int.c ****       {
+ 204              		.loc 1 129 32 is_stmt 0 view .LVU42
+ 205 0104 BDF80620 		ldrh	r2, [sp, #6]
+ 129:usb_driver/Src/usb_int.c ****       {
+ 206              		.loc 1 129 10 view .LVU43
+ 207 0108 12F4004F 		tst	r2, #32768
+ 208 010c 40F09B80 		bne	.L23
+ 209              	.L20:
+ 139:usb_driver/Src/usb_int.c ****       {
+ 210              		.loc 1 139 7 is_stmt 1 view .LVU44
+ 139:usb_driver/Src/usb_int.c ****       {
+ 211              		.loc 1 139 19 is_stmt 0 view .LVU45
+ 212 0110 BDF80630 		ldrh	r3, [sp, #6]
+ 139:usb_driver/Src/usb_int.c ****       {
+ 213              		.loc 1 139 10 view .LVU46
+ 214 0114 13F0800F 		tst	r3, #128
+ 215 0118 14D0     		beq	.L2
+ 142:usb_driver/Src/usb_int.c **** 
+ 216              		.loc 1 142 9 is_stmt 1 view .LVU47
+ 217 011a 5549     		ldr	r1, .L26+12
+ 218 011c 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 219 011e 9B00     		lsls	r3, r3, #2
+ 220 0120 03F18043 		add	r3, r3, #1073741824
+ 221 0124 03F5B843 		add	r3, r3, #23552
+ 222 0128 1A68     		ldr	r2, [r3]
+ 223 012a 22F4E142 		bic	r2, r2, #28800
+ARM GAS  /tmp/ccAov5f1.s 			page 8
+
+
+ 224 012e 22F07002 		bic	r2, r2, #112
+ 225 0132 1204     		lsls	r2, r2, #16
+ 226 0134 120C     		lsrs	r2, r2, #16
+ 227 0136 1A60     		str	r2, [r3]
+ 145:usb_driver/Src/usb_int.c ****       } /* if((wEPVal & EP_CTR_TX) != 0) */
+ 228              		.loc 1 145 9 view .LVU48
+ 145:usb_driver/Src/usb_int.c ****       } /* if((wEPVal & EP_CTR_TX) != 0) */
+ 229              		.loc 1 145 28 is_stmt 0 view .LVU49
+ 230 0138 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 231 013a 013B     		subs	r3, r3, #1
+ 145:usb_driver/Src/usb_int.c ****       } /* if((wEPVal & EP_CTR_TX) != 0) */
+ 232              		.loc 1 145 10 view .LVU50
+ 233 013c 4D4A     		ldr	r2, .L26+16
+ 234 013e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 235 0142 9847     		blx	r3
+ 236              	.LVL15:
+ 237              	.L2:
+  57:usb_driver/Src/usb_int.c ****   {
+ 238              		.loc 1 57 9 is_stmt 1 view .LVU51
+  57:usb_driver/Src/usb_int.c ****   {
+ 239              		.loc 1 57 20 is_stmt 0 view .LVU52
+ 240 0144 494B     		ldr	r3, .L26+8
+ 241 0146 D3F8443C 		ldr	r3, [r3, #3140]
+ 242 014a 99B2     		uxth	r1, r3
+  57:usb_driver/Src/usb_int.c ****   {
+ 243              		.loc 1 57 18 view .LVU53
+ 244 014c 4A4A     		ldr	r2, .L26+20
+ 245 014e 1180     		strh	r1, [r2]	@ movhi
+  57:usb_driver/Src/usb_int.c ****   {
+ 246              		.loc 1 57 9 view .LVU54
+ 247 0150 13F4004F 		tst	r3, #32768
+ 248 0154 93D0     		beq	.L1
+  60:usb_driver/Src/usb_int.c ****     if (EPindex == 0)
+ 249              		.loc 1 60 5 is_stmt 1 view .LVU55
+  60:usb_driver/Src/usb_int.c ****     if (EPindex == 0)
+ 250              		.loc 1 60 31 is_stmt 0 view .LVU56
+ 251 0156 484B     		ldr	r3, .L26+20
+ 252 0158 1B88     		ldrh	r3, [r3]
+  60:usb_driver/Src/usb_int.c ****     if (EPindex == 0)
+ 253              		.loc 1 60 15 view .LVU57
+ 254 015a 03F00F03 		and	r3, r3, #15
+  60:usb_driver/Src/usb_int.c ****     if (EPindex == 0)
+ 255              		.loc 1 60 13 view .LVU58
+ 256 015e 444A     		ldr	r2, .L26+12
+ 257 0160 1370     		strb	r3, [r2]
+  61:usb_driver/Src/usb_int.c ****     {
+ 258              		.loc 1 61 5 is_stmt 1 view .LVU59
+  61:usb_driver/Src/usb_int.c ****     {
+ 259              		.loc 1 61 8 is_stmt 0 view .LVU60
+ 260 0162 002B     		cmp	r3, #0
+ 261 0164 C5D1     		bne	.L3
+  70:usb_driver/Src/usb_int.c **** 	    SaveTState = SaveRState & EPTX_STAT;
+ 262              		.loc 1 70 6 is_stmt 1 view .LVU61
+  70:usb_driver/Src/usb_int.c **** 	    SaveTState = SaveRState & EPTX_STAT;
+ 263              		.loc 1 70 19 is_stmt 0 view .LVU62
+ 264 0166 414A     		ldr	r2, .L26+8
+ 265 0168 D2F8001C 		ldr	r1, [r2, #3072]
+ARM GAS  /tmp/ccAov5f1.s 			page 9
+
+
+ 266 016c 89B2     		uxth	r1, r1
+  70:usb_driver/Src/usb_int.c **** 	    SaveTState = SaveRState & EPTX_STAT;
+ 267              		.loc 1 70 17 view .LVU63
+ 268 016e 3D4B     		ldr	r3, .L26
+ 269 0170 1980     		strh	r1, [r3]	@ movhi
+  71:usb_driver/Src/usb_int.c **** 	    SaveRState &=  EPRX_STAT;	
+ 270              		.loc 1 71 6 is_stmt 1 view .LVU64
+  71:usb_driver/Src/usb_int.c **** 	    SaveRState &=  EPRX_STAT;	
+ 271              		.loc 1 71 30 is_stmt 0 view .LVU65
+ 272 0172 1988     		ldrh	r1, [r3]
+ 273 0174 01F03001 		and	r1, r1, #48
+  71:usb_driver/Src/usb_int.c **** 	    SaveRState &=  EPRX_STAT;	
+ 274              		.loc 1 71 17 view .LVU66
+ 275 0178 3B48     		ldr	r0, .L26+4
+ 276 017a 0180     		strh	r1, [r0]	@ movhi
+  72:usb_driver/Src/usb_int.c **** 
+ 277              		.loc 1 72 6 is_stmt 1 view .LVU67
+  72:usb_driver/Src/usb_int.c **** 
+ 278              		.loc 1 72 17 is_stmt 0 view .LVU68
+ 279 017c 1988     		ldrh	r1, [r3]
+ 280 017e 01F44051 		and	r1, r1, #12288
+ 281 0182 1980     		strh	r1, [r3]	@ movhi
+ 282              	.LBB4:
+  74:usb_driver/Src/usb_int.c **** 
+ 283              		.loc 1 74 6 is_stmt 1 view .LVU69
+  74:usb_driver/Src/usb_int.c **** 
+ 284              		.loc 1 74 6 view .LVU70
+ 285 0184 D2F8003C 		ldr	r3, [r2, #3072]
+ 286 0188 23F48043 		bic	r3, r3, #16384
+ 287 018c 23F04003 		bic	r3, r3, #64
+ 288 0190 1B04     		lsls	r3, r3, #16
+ 289 0192 1B0C     		lsrs	r3, r3, #16
+ 290              	.LVL16:
+  74:usb_driver/Src/usb_int.c **** 
+ 291              		.loc 1 74 6 view .LVU71
+  74:usb_driver/Src/usb_int.c **** 
+ 292              		.loc 1 74 6 view .LVU72
+  74:usb_driver/Src/usb_int.c **** 
+ 293              		.loc 1 74 6 view .LVU73
+  74:usb_driver/Src/usb_int.c **** 
+ 294              		.loc 1 74 6 view .LVU74
+  74:usb_driver/Src/usb_int.c **** 
+ 295              		.loc 1 74 6 view .LVU75
+  74:usb_driver/Src/usb_int.c **** 
+ 296              		.loc 1 74 6 view .LVU76
+  74:usb_driver/Src/usb_int.c **** 
+ 297              		.loc 1 74 6 view .LVU77
+ 298 0194 83F40053 		eor	r3, r3, #8192
+ 299              	.LVL17:
+  74:usb_driver/Src/usb_int.c **** 
+ 300              		.loc 1 74 6 is_stmt 0 view .LVU78
+ 301 0198 83F02003 		eor	r3, r3, #32
+ 302              	.LVL18:
+  74:usb_driver/Src/usb_int.c **** 
+ 303              		.loc 1 74 6 view .LVU79
+ 304 019c 43F40043 		orr	r3, r3, #32768
+ 305              	.LVL19:
+ARM GAS  /tmp/ccAov5f1.s 			page 10
+
+
+  74:usb_driver/Src/usb_int.c **** 
+ 306              		.loc 1 74 6 view .LVU80
+ 307 01a0 43F08003 		orr	r3, r3, #128
+ 308 01a4 C2F8003C 		str	r3, [r2, #3072]
+ 309              	.LBE4:
+  74:usb_driver/Src/usb_int.c **** 
+ 310              		.loc 1 74 49 is_stmt 1 view .LVU81
+  78:usb_driver/Src/usb_int.c ****       {
+ 311              		.loc 1 78 7 view .LVU82
+  78:usb_driver/Src/usb_int.c ****       {
+ 312              		.loc 1 78 18 is_stmt 0 view .LVU83
+ 313 01a8 334B     		ldr	r3, .L26+20
+ 314 01aa 1B88     		ldrh	r3, [r3]
+  78:usb_driver/Src/usb_int.c ****       {
+ 315              		.loc 1 78 10 view .LVU84
+ 316 01ac 13F0100F 		tst	r3, #16
+ 317 01b0 3FF42CAF 		beq	.L24
+ 100:usb_driver/Src/usb_int.c ****         
+ 318              		.loc 1 100 9 is_stmt 1 view .LVU85
+ 100:usb_driver/Src/usb_int.c ****         
+ 319              		.loc 1 100 18 is_stmt 0 view .LVU86
+ 320 01b4 2D4B     		ldr	r3, .L26+8
+ 321 01b6 D3F8003C 		ldr	r3, [r3, #3072]
+ 322 01ba 9BB2     		uxth	r3, r3
+ 100:usb_driver/Src/usb_int.c ****         
+ 323              		.loc 1 100 16 view .LVU87
+ 324 01bc ADF80630 		strh	r3, [sp, #6]	@ movhi
+ 102:usb_driver/Src/usb_int.c ****         {
+ 325              		.loc 1 102 9 is_stmt 1 view .LVU88
+ 102:usb_driver/Src/usb_int.c ****         {
+ 326              		.loc 1 102 21 is_stmt 0 view .LVU89
+ 327 01c0 BDF80630 		ldrh	r3, [sp, #6]
+ 102:usb_driver/Src/usb_int.c ****         {
+ 328              		.loc 1 102 12 view .LVU90
+ 329 01c4 13F4006F 		tst	r3, #2048
+ 330 01c8 7FF45BAF 		bne	.L25
+ 112:usb_driver/Src/usb_int.c ****         {
+ 331              		.loc 1 112 14 is_stmt 1 view .LVU91
+ 112:usb_driver/Src/usb_int.c ****         {
+ 332              		.loc 1 112 39 is_stmt 0 view .LVU92
+ 333 01cc BDF80630 		ldrh	r3, [sp, #6]
+ 112:usb_driver/Src/usb_int.c ****         {
+ 334              		.loc 1 112 17 view .LVU93
+ 335 01d0 13F4004F 		tst	r3, #32768
+ 336 01d4 B6D0     		beq	.L2
+ 114:usb_driver/Src/usb_int.c ****           Out0_Process();
+ 337              		.loc 1 114 11 is_stmt 1 view .LVU94
+ 338 01d6 254C     		ldr	r4, .L26+8
+ 339 01d8 D4F8003C 		ldr	r3, [r4, #3072]
+ 340 01dc 23F07003 		bic	r3, r3, #112
+ 341 01e0 1B05     		lsls	r3, r3, #20
+ 342 01e2 1B0D     		lsrs	r3, r3, #20
+ 343 01e4 C4F8003C 		str	r3, [r4, #3072]
+ 115:usb_driver/Src/usb_int.c ****           /* before terminate set Tx & Rx status */
+ 344              		.loc 1 115 11 view .LVU95
+ 345 01e8 FFF7FEFF 		bl	Out0_Process
+ 346              	.LVL20:
+ARM GAS  /tmp/ccAov5f1.s 			page 11
+
+
+ 347              	.LBB5:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 348              		.loc 1 118 8 view .LVU96
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 349              		.loc 1 118 8 view .LVU97
+ 350 01ec D4F8003C 		ldr	r3, [r4, #3072]
+ 351 01f0 23F48043 		bic	r3, r3, #16384
+ 352 01f4 23F04003 		bic	r3, r3, #64
+ 353 01f8 1B04     		lsls	r3, r3, #16
+ 354 01fa 1B0C     		lsrs	r3, r3, #16
+ 355              	.LVL21:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 356              		.loc 1 118 8 view .LVU98
+ 357 01fc 194A     		ldr	r2, .L26
+ 358 01fe 1288     		ldrh	r2, [r2]
+ 359 0200 12F4805F 		tst	r2, #4096
+ 360 0204 01D0     		beq	.L16
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 361              		.loc 1 118 8 discriminator 1 view .LVU99
+ 362 0206 83F48053 		eor	r3, r3, #4096
+ 363              	.LVL22:
+ 364              	.L16:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 365              		.loc 1 118 8 discriminator 3 view .LVU100
+ 366 020a 164A     		ldr	r2, .L26
+ 367 020c 1288     		ldrh	r2, [r2]
+ 368 020e 12F4005F 		tst	r2, #8192
+ 369 0212 01D0     		beq	.L17
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 370              		.loc 1 118 8 discriminator 4 view .LVU101
+ 371 0214 83F40053 		eor	r3, r3, #8192
+ 372              	.LVL23:
+ 373              	.L17:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 374              		.loc 1 118 8 discriminator 6 view .LVU102
+ 375 0218 134A     		ldr	r2, .L26+4
+ 376 021a 1288     		ldrh	r2, [r2]
+ 377 021c 12F0100F 		tst	r2, #16
+ 378 0220 01D0     		beq	.L18
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 379              		.loc 1 118 8 discriminator 7 view .LVU103
+ 380 0222 83F01003 		eor	r3, r3, #16
+ 381              	.LVL24:
+ 382              	.L18:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 383              		.loc 1 118 8 discriminator 9 view .LVU104
+ 384 0226 104A     		ldr	r2, .L26+4
+ 385 0228 1288     		ldrh	r2, [r2]
+ 386 022a 12F0200F 		tst	r2, #32
+ 387 022e 01D0     		beq	.L19
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 388              		.loc 1 118 8 discriminator 10 view .LVU105
+ 389 0230 83F02003 		eor	r3, r3, #32
+ 390              	.LVL25:
+ 391              	.L19:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 392              		.loc 1 118 8 discriminator 12 view .LVU106
+ARM GAS  /tmp/ccAov5f1.s 			page 12
+
+
+ 393 0234 9BB2     		uxth	r3, r3
+ 394              	.LVL26:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 395              		.loc 1 118 8 is_stmt 0 discriminator 12 view .LVU107
+ 396 0236 43F40043 		orr	r3, r3, #32768
+ 397 023a 43F08003 		orr	r3, r3, #128
+ 398 023e 0B4A     		ldr	r2, .L26+8
+ 399 0240 C2F8003C 		str	r3, [r2, #3072]
+ 400              	.LBE5:
+ 118:usb_driver/Src/usb_int.c ****           return;
+ 401              		.loc 1 118 53 is_stmt 1 discriminator 12 view .LVU108
+ 119:usb_driver/Src/usb_int.c ****         }
+ 402              		.loc 1 119 11 discriminator 12 view .LVU109
+ 403 0244 1BE7     		b	.L1
+ 404              	.L23:
+ 132:usb_driver/Src/usb_int.c **** 
+ 405              		.loc 1 132 9 view .LVU110
+ 406 0246 1A68     		ldr	r2, [r3]
+ 407 0248 22F07002 		bic	r2, r2, #112
+ 408 024c 1205     		lsls	r2, r2, #20
+ 409 024e 120D     		lsrs	r2, r2, #20
+ 410 0250 1A60     		str	r2, [r3]
+ 135:usb_driver/Src/usb_int.c **** 
+ 411              		.loc 1 135 9 view .LVU111
+ 135:usb_driver/Src/usb_int.c **** 
+ 412              		.loc 1 135 29 is_stmt 0 view .LVU112
+ 413 0252 074B     		ldr	r3, .L26+12
+ 414 0254 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 415 0256 013B     		subs	r3, r3, #1
+ 135:usb_driver/Src/usb_int.c **** 
+ 416              		.loc 1 135 10 view .LVU113
+ 417 0258 084A     		ldr	r2, .L26+24
+ 418 025a 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 419 025e 9847     		blx	r3
+ 420              	.LVL27:
+ 421 0260 56E7     		b	.L20
+ 422              	.L27:
+ 423 0262 00BF     		.align	2
+ 424              	.L26:
+ 425 0264 00000000 		.word	.LANCHOR0
+ 426 0268 00000000 		.word	.LANCHOR1
+ 427 026c 00500040 		.word	1073762304
+ 428 0270 00000000 		.word	EPindex
+ 429 0274 00000000 		.word	pEpInt_IN
+ 430 0278 00000000 		.word	wIstr
+ 431 027c 00000000 		.word	pEpInt_OUT
+ 432              		.cfi_endproc
+ 433              	.LFE56:
+ 435              		.section	.text.CTR_HP,"ax",%progbits
+ 436              		.align	1
+ 437              		.global	CTR_HP
+ 438              		.syntax unified
+ 439              		.thumb
+ 440              		.thumb_func
+ 441              		.fpu softvfp
+ 443              	CTR_HP:
+ 444              	.LFB57:
+ARM GAS  /tmp/ccAov5f1.s 			page 13
+
+
+ 152:usb_driver/Src/usb_int.c **** 
+ 153:usb_driver/Src/usb_int.c **** /*******************************************************************************
+ 154:usb_driver/Src/usb_int.c **** * Function Name  : CTR_HP.
+ 155:usb_driver/Src/usb_int.c **** * Description    : High Priority Endpoint Correct Transfer interrupt's service 
+ 156:usb_driver/Src/usb_int.c **** *                  routine.
+ 157:usb_driver/Src/usb_int.c **** * Input          : None.
+ 158:usb_driver/Src/usb_int.c **** * Output         : None.
+ 159:usb_driver/Src/usb_int.c **** * Return         : None.
+ 160:usb_driver/Src/usb_int.c **** *******************************************************************************/
+ 161:usb_driver/Src/usb_int.c **** void CTR_HP(void)
+ 162:usb_driver/Src/usb_int.c **** {
+ 445              		.loc 1 162 1 is_stmt 1 view -0
+ 446              		.cfi_startproc
+ 447              		@ args = 0, pretend = 0, frame = 0
+ 448              		@ frame_needed = 0, uses_anonymous_args = 0
+ 449 0000 08B5     		push	{r3, lr}
+ 450              	.LCFI4:
+ 451              		.cfi_def_cfa_offset 8
+ 452              		.cfi_offset 3, -8
+ 453              		.cfi_offset 14, -4
+ 163:usb_driver/Src/usb_int.c ****   uint32_t wEPVal = 0;
+ 454              		.loc 1 163 3 view .LVU115
+ 455              	.LVL28:
+ 164:usb_driver/Src/usb_int.c **** 
+ 165:usb_driver/Src/usb_int.c ****   while (((wIstr = _GetISTR()) & ISTR_CTR) != 0)
+ 456              		.loc 1 165 3 view .LVU116
+ 457              		.loc 1 165 9 is_stmt 0 view .LVU117
+ 458 0002 11E0     		b	.L29
+ 459              	.LVL29:
+ 460              	.L30:
+ 166:usb_driver/Src/usb_int.c ****   {
+ 167:usb_driver/Src/usb_int.c ****     _SetISTR((uint16_t)CLR_CTR); /* clear CTR flag */
+ 168:usb_driver/Src/usb_int.c ****     /* extract highest priority endpoint number */
+ 169:usb_driver/Src/usb_int.c ****     EPindex = (uint8_t)(wIstr & ISTR_EP_ID);
+ 170:usb_driver/Src/usb_int.c ****     /* process related endpoint register */
+ 171:usb_driver/Src/usb_int.c ****     wEPVal = _GetENDPOINT(EPindex);
+ 172:usb_driver/Src/usb_int.c ****     if ((wEPVal & EP_CTR_RX) != 0)
+ 173:usb_driver/Src/usb_int.c ****     {
+ 174:usb_driver/Src/usb_int.c ****       /* clear int flag */
+ 175:usb_driver/Src/usb_int.c ****       _ClearEP_CTR_RX(EPindex);
+ 176:usb_driver/Src/usb_int.c **** 
+ 177:usb_driver/Src/usb_int.c ****       /* call OUT service function */
+ 178:usb_driver/Src/usb_int.c ****       (*pEpInt_OUT[EPindex-1])();
+ 179:usb_driver/Src/usb_int.c **** 
+ 180:usb_driver/Src/usb_int.c ****     } /* if((wEPVal & EP_CTR_RX) */
+ 181:usb_driver/Src/usb_int.c ****     else if ((wEPVal & EP_CTR_TX) != 0)
+ 461              		.loc 1 181 10 is_stmt 1 view .LVU118
+ 462              		.loc 1 181 13 is_stmt 0 view .LVU119
+ 463 0004 12F0800F 		tst	r2, #128
+ 464 0008 0ED0     		beq	.L29
+ 182:usb_driver/Src/usb_int.c ****     {
+ 183:usb_driver/Src/usb_int.c ****       /* clear int flag */
+ 184:usb_driver/Src/usb_int.c ****       _ClearEP_CTR_TX(EPindex);
+ 465              		.loc 1 184 7 is_stmt 1 view .LVU120
+ 466 000a 1A68     		ldr	r2, [r3]
+ 467              	.LVL30:
+ 468              		.loc 1 184 7 is_stmt 0 view .LVU121
+ARM GAS  /tmp/ccAov5f1.s 			page 14
+
+
+ 469 000c 22F4E142 		bic	r2, r2, #28800
+ 470 0010 22F07002 		bic	r2, r2, #112
+ 471 0014 1204     		lsls	r2, r2, #16
+ 472 0016 120C     		lsrs	r2, r2, #16
+ 473 0018 1A60     		str	r2, [r3]
+ 185:usb_driver/Src/usb_int.c **** 
+ 186:usb_driver/Src/usb_int.c ****       /* call IN service function */
+ 187:usb_driver/Src/usb_int.c ****       (*pEpInt_IN[EPindex-1])();
+ 474              		.loc 1 187 7 is_stmt 1 view .LVU122
+ 475              		.loc 1 187 26 is_stmt 0 view .LVU123
+ 476 001a 194B     		ldr	r3, .L35
+ 477 001c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 478 001e 013B     		subs	r3, r3, #1
+ 479              		.loc 1 187 8 view .LVU124
+ 480 0020 184A     		ldr	r2, .L35+4
+ 481 0022 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 482 0026 9847     		blx	r3
+ 483              	.LVL31:
+ 484              	.L29:
+ 165:usb_driver/Src/usb_int.c ****   {
+ 485              		.loc 1 165 9 is_stmt 1 view .LVU125
+ 165:usb_driver/Src/usb_int.c ****   {
+ 486              		.loc 1 165 20 is_stmt 0 view .LVU126
+ 487 0028 174B     		ldr	r3, .L35+8
+ 488 002a D3F8443C 		ldr	r3, [r3, #3140]
+ 489 002e 99B2     		uxth	r1, r3
+ 165:usb_driver/Src/usb_int.c ****   {
+ 490              		.loc 1 165 18 view .LVU127
+ 491 0030 164A     		ldr	r2, .L35+12
+ 492 0032 1180     		strh	r1, [r2]	@ movhi
+ 165:usb_driver/Src/usb_int.c ****   {
+ 493              		.loc 1 165 9 view .LVU128
+ 494 0034 13F4004F 		tst	r3, #32768
+ 495 0038 21D0     		beq	.L34
+ 167:usb_driver/Src/usb_int.c ****     /* extract highest priority endpoint number */
+ 496              		.loc 1 167 5 is_stmt 1 view .LVU129
+ 497 003a 134B     		ldr	r3, .L35+8
+ 498 003c 47F6FF72 		movw	r2, #32767
+ 499 0040 C3F8442C 		str	r2, [r3, #3140]
+ 169:usb_driver/Src/usb_int.c ****     /* process related endpoint register */
+ 500              		.loc 1 169 5 view .LVU130
+ 169:usb_driver/Src/usb_int.c ****     /* process related endpoint register */
+ 501              		.loc 1 169 31 is_stmt 0 view .LVU131
+ 502 0044 114B     		ldr	r3, .L35+12
+ 503 0046 1B88     		ldrh	r3, [r3]
+ 169:usb_driver/Src/usb_int.c ****     /* process related endpoint register */
+ 504              		.loc 1 169 15 view .LVU132
+ 505 0048 03F00F03 		and	r3, r3, #15
+ 169:usb_driver/Src/usb_int.c ****     /* process related endpoint register */
+ 506              		.loc 1 169 13 view .LVU133
+ 507 004c 0C4A     		ldr	r2, .L35
+ 508 004e 1370     		strb	r3, [r2]
+ 171:usb_driver/Src/usb_int.c ****     if ((wEPVal & EP_CTR_RX) != 0)
+ 509              		.loc 1 171 5 is_stmt 1 view .LVU134
+ 171:usb_driver/Src/usb_int.c ****     if ((wEPVal & EP_CTR_RX) != 0)
+ 510              		.loc 1 171 14 is_stmt 0 view .LVU135
+ 511 0050 9B00     		lsls	r3, r3, #2
+ARM GAS  /tmp/ccAov5f1.s 			page 15
+
+
+ 512 0052 03F18043 		add	r3, r3, #1073741824
+ 513 0056 03F5B843 		add	r3, r3, #23552
+ 514 005a 1A68     		ldr	r2, [r3]
+ 515              	.LVL32:
+ 172:usb_driver/Src/usb_int.c ****     {
+ 516              		.loc 1 172 5 is_stmt 1 view .LVU136
+ 172:usb_driver/Src/usb_int.c ****     {
+ 517              		.loc 1 172 8 is_stmt 0 view .LVU137
+ 518 005c 12F4004F 		tst	r2, #32768
+ 519 0060 D0D0     		beq	.L30
+ 175:usb_driver/Src/usb_int.c **** 
+ 520              		.loc 1 175 7 is_stmt 1 view .LVU138
+ 521 0062 1A68     		ldr	r2, [r3]
+ 522              	.LVL33:
+ 175:usb_driver/Src/usb_int.c **** 
+ 523              		.loc 1 175 7 is_stmt 0 view .LVU139
+ 524 0064 22F07002 		bic	r2, r2, #112
+ 525 0068 1205     		lsls	r2, r2, #20
+ 526 006a 120D     		lsrs	r2, r2, #20
+ 527 006c 1A60     		str	r2, [r3]
+ 178:usb_driver/Src/usb_int.c **** 
+ 528              		.loc 1 178 7 is_stmt 1 view .LVU140
+ 178:usb_driver/Src/usb_int.c **** 
+ 529              		.loc 1 178 27 is_stmt 0 view .LVU141
+ 530 006e 044B     		ldr	r3, .L35
+ 531 0070 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 532 0072 013B     		subs	r3, r3, #1
+ 178:usb_driver/Src/usb_int.c **** 
+ 533              		.loc 1 178 8 view .LVU142
+ 534 0074 064A     		ldr	r2, .L35+16
+ 535 0076 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 536 007a 9847     		blx	r3
+ 537              	.LVL34:
+ 538 007c D4E7     		b	.L29
+ 539              	.L34:
+ 188:usb_driver/Src/usb_int.c **** 
+ 189:usb_driver/Src/usb_int.c **** 
+ 190:usb_driver/Src/usb_int.c ****     } /* if((wEPVal & EP_CTR_TX) != 0) */
+ 191:usb_driver/Src/usb_int.c **** 
+ 192:usb_driver/Src/usb_int.c ****   }/* while(...) */
+ 193:usb_driver/Src/usb_int.c **** }
+ 540              		.loc 1 193 1 view .LVU143
+ 541 007e 08BD     		pop	{r3, pc}
+ 542              	.L36:
+ 543              		.align	2
+ 544              	.L35:
+ 545 0080 00000000 		.word	EPindex
+ 546 0084 00000000 		.word	pEpInt_IN
+ 547 0088 00500040 		.word	1073762304
+ 548 008c 00000000 		.word	wIstr
+ 549 0090 00000000 		.word	pEpInt_OUT
+ 550              		.cfi_endproc
+ 551              	.LFE57:
+ 553              		.global	SaveTState
+ 554              		.global	SaveRState
+ 555              		.section	.bss.SaveRState,"aw",%nobits
+ 556              		.align	1
+ARM GAS  /tmp/ccAov5f1.s 			page 16
+
+
+ 557              		.set	.LANCHOR0,. + 0
+ 560              	SaveRState:
+ 561 0000 0000     		.space	2
+ 562              		.section	.bss.SaveTState,"aw",%nobits
+ 563              		.align	1
+ 564              		.set	.LANCHOR1,. + 0
+ 567              	SaveTState:
+ 568 0000 0000     		.space	2
+ 569              		.text
+ 570              	.Letext0:
+ 571              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 572              		.file 3 "usb_driver/Inc/usb_regs.h"
+ 573              		.file 4 "usb_driver/Inc/usb_core.h"
+ 574              		.file 5 "usb_driver/Inc/usb_init.h"
+ARM GAS  /tmp/ccAov5f1.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb_int.c
+     /tmp/ccAov5f1.s:16     .text.CTR_LP:0000000000000000 $t
+     /tmp/ccAov5f1.s:24     .text.CTR_LP:0000000000000000 CTR_LP
+     /tmp/ccAov5f1.s:425    .text.CTR_LP:0000000000000264 $d
+     /tmp/ccAov5f1.s:436    .text.CTR_HP:0000000000000000 $t
+     /tmp/ccAov5f1.s:443    .text.CTR_HP:0000000000000000 CTR_HP
+     /tmp/ccAov5f1.s:545    .text.CTR_HP:0000000000000080 $d
+     /tmp/ccAov5f1.s:567    .bss.SaveTState:0000000000000000 SaveTState
+     /tmp/ccAov5f1.s:560    .bss.SaveRState:0000000000000000 SaveRState
+     /tmp/ccAov5f1.s:556    .bss.SaveRState:0000000000000000 $d
+     /tmp/ccAov5f1.s:563    .bss.SaveTState:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+In0_Process
+Setup0_Process
+Out0_Process
+EPindex
+pEpInt_IN
+wIstr
+pEpInt_OUT

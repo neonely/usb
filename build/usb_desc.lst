@@ -1,0 +1,133 @@
+ARM GAS  /tmp/cczVxvoX.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usb_desc.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.global	String_Descriptor
+  16              		.global	Config_Descriptor
+  17              		.global	Device_Descriptor
+  18              		.global	USB_StringSerial
+  19              		.global	USB_StringProduct
+  20              		.global	USB_StringVendor
+  21              		.global	USB_StringLangID
+  22              		.global	USB_ConfigDescriptor
+  23              		.global	USB_DeviceDescriptor
+  24              		.section	.data.Config_Descriptor,"aw"
+  25              		.align	2
+  28              	Config_Descriptor:
+  29 0000 00000000 		.word	USB_ConfigDescriptor
+  30 0004 2000     		.short	32
+  31 0006 0000     		.space	2
+  32              		.section	.data.Device_Descriptor,"aw"
+  33              		.align	2
+  36              	Device_Descriptor:
+  37 0000 00000000 		.word	USB_DeviceDescriptor
+  38 0004 1200     		.short	18
+  39 0006 0000     		.space	2
+  40              		.section	.data.String_Descriptor,"aw"
+  41              		.align	2
+  44              	String_Descriptor:
+  45 0000 00000000 		.word	USB_StringLangID
+  46 0004 0400     		.short	4
+  47 0006 0000     		.space	2
+  48 0008 00000000 		.word	USB_StringVendor
+  49 000c 1200     		.short	18
+  50 000e 0000     		.space	2
+  51 0010 00000000 		.word	USB_StringProduct
+  52 0014 1000     		.short	16
+  53 0016 0000     		.space	2
+  54 0018 00000000 		.word	USB_StringSerial
+  55 001c 1000     		.short	16
+  56 001e 0000     		.space	2
+  57              		.section	.data.USB_StringSerial,"aw"
+  58              		.align	2
+  61              	USB_StringSerial:
+  62 0000 10035500 		.ascii	"\020\003U\000S\000B\000T\000E\000S\000T\000"
+  62      53004200 
+  62      54004500 
+  62      53005400 
+ARM GAS  /tmp/cczVxvoX.s 			page 2
+
+
+  63              		.section	.rodata.USB_ConfigDescriptor,"a"
+  64              		.align	2
+  67              	USB_ConfigDescriptor:
+  68 0000 09022000 		.ascii	"\011\002 \000\001\001\000\3402\011\004\000\000\002\377"
+  68      010100E0 
+  68      32090400 
+  68      0002FF
+  69 000f 00000007 		.ascii	"\000\000\000\007\005\001\002@\000\000\007\005\202\002"
+  69      05010240 
+  69      00000705 
+  69      8202
+  70 001d 400000   		.ascii	"@\000\000"
+  71              		.section	.rodata.USB_DeviceDescriptor,"a"
+  72              		.align	2
+  75              	USB_DeviceDescriptor:
+  76 0000 12010002 		.ascii	"\022\001\000\002\377\000\000@\255\336\015\360\000\001"
+  76      FF000040 
+  76      ADDE0DF0 
+  76      0001
+  77 000e 01020301 		.ascii	"\001\002\003\001"
+  78              		.section	.rodata.USB_StringLangID,"a"
+  79              		.align	2
+  82              	USB_StringLangID:
+  83 0000 04030904 		.ascii	"\004\003\011\004"
+  84              		.section	.rodata.USB_StringProduct,"a"
+  85              		.align	2
+  88              	USB_StringProduct:
+  89 0000 10035500 		.ascii	"\020\003U\000S\000B\000 \000X\000X\000X\000"
+  89      53004200 
+  89      20005800 
+  89      58005800 
+  90              		.section	.rodata.USB_StringVendor,"a"
+  91              		.align	2
+  94              	USB_StringVendor:
+  95 0000 12035600 		.ascii	"\022\003V\000l\000a\000d\000i\000m\000i\000r\000"
+  95      6C006100 
+  95      64006900 
+  95      6D006900 
+  95      7200
+  96              		.text
+  97              	.Letext0:
+  98              		.file 1 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+  99              		.file 2 "usb_driver/Inc/usb_core.h"
+ 100              		.file 3 "usb_user/Inc/usb_desc.h"
+ 101              		.file 4 "usb_user/Src/usb_desc.c"
+ARM GAS  /tmp/cczVxvoX.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb_desc.c
+     /tmp/cczVxvoX.s:44     .data.String_Descriptor:0000000000000000 String_Descriptor
+     /tmp/cczVxvoX.s:28     .data.Config_Descriptor:0000000000000000 Config_Descriptor
+     /tmp/cczVxvoX.s:36     .data.Device_Descriptor:0000000000000000 Device_Descriptor
+     /tmp/cczVxvoX.s:61     .data.USB_StringSerial:0000000000000000 USB_StringSerial
+     /tmp/cczVxvoX.s:88     .rodata.USB_StringProduct:0000000000000000 USB_StringProduct
+     /tmp/cczVxvoX.s:94     .rodata.USB_StringVendor:0000000000000000 USB_StringVendor
+     /tmp/cczVxvoX.s:82     .rodata.USB_StringLangID:0000000000000000 USB_StringLangID
+     /tmp/cczVxvoX.s:67     .rodata.USB_ConfigDescriptor:0000000000000000 USB_ConfigDescriptor
+     /tmp/cczVxvoX.s:75     .rodata.USB_DeviceDescriptor:0000000000000000 USB_DeviceDescriptor
+     /tmp/cczVxvoX.s:25     .data.Config_Descriptor:0000000000000000 $d
+     /tmp/cczVxvoX.s:33     .data.Device_Descriptor:0000000000000000 $d
+     /tmp/cczVxvoX.s:41     .data.String_Descriptor:0000000000000000 $d
+     /tmp/cczVxvoX.s:58     .data.USB_StringSerial:0000000000000000 $d
+     /tmp/cczVxvoX.s:64     .rodata.USB_ConfigDescriptor:0000000000000000 $d
+     /tmp/cczVxvoX.s:72     .rodata.USB_DeviceDescriptor:0000000000000000 $d
+     /tmp/cczVxvoX.s:79     .rodata.USB_StringLangID:0000000000000000 $d
+     /tmp/cczVxvoX.s:85     .rodata.USB_StringProduct:0000000000000000 $d
+     /tmp/cczVxvoX.s:91     .rodata.USB_StringVendor:0000000000000000 $d
+
+NO UNDEFINED SYMBOLS

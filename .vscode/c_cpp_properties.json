@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "${workspaceFolderBasename}",
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/cmsis/Inc",
+                "${workspaceFolder}/cmsis_boot/Inc",
+                "${workspaceFolder}/core/Inc",
+                "${workspaceFolder}/stm_lib/Inc",
+                "${workspaceFolder}/usb_driver/Inc",
+                "${workspaceFolder}/usb_user/Inc"
+            ],
+            "defines": [
+                "STM32F10X_HD",
+                "USE_STDPERIPH_DRIVER"
+            ],
+            "intelliSenseMode": "gcc-arm",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}

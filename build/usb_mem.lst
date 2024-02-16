@@ -1,0 +1,266 @@
+ARM GAS  /tmp/ccXx6Lp3.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usb_mem.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.UserToPMABufferCopy,"ax",%progbits
+  16              		.align	1
+  17              		.global	UserToPMABufferCopy
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	UserToPMABufferCopy:
+  25              	.LVL0:
+  26              	.LFB56:
+  27              		.file 1 "usb_driver/Src/usb_mem.c"
+   1:usb_driver/Src/usb_mem.c **** /**
+   2:usb_driver/Src/usb_mem.c ****   ******************************************************************************
+   3:usb_driver/Src/usb_mem.c ****   * @file    usb_mem.c
+   4:usb_driver/Src/usb_mem.c ****   * @author  MCD Application Team
+   5:usb_driver/Src/usb_mem.c ****   * @version V4.0.0
+   6:usb_driver/Src/usb_mem.c ****   * @date    28-August-2012
+   7:usb_driver/Src/usb_mem.c ****   * @brief   Utility functions for memory transfers to/from PMA
+   8:usb_driver/Src/usb_mem.c ****   ******************************************************************************
+   9:usb_driver/Src/usb_mem.c ****   * @attention
+  10:usb_driver/Src/usb_mem.c ****   *
+  11:usb_driver/Src/usb_mem.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  12:usb_driver/Src/usb_mem.c ****   *
+  13:usb_driver/Src/usb_mem.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  14:usb_driver/Src/usb_mem.c ****   * You may not use this file except in compliance with the License.
+  15:usb_driver/Src/usb_mem.c ****   * You may obtain a copy of the License at:
+  16:usb_driver/Src/usb_mem.c ****   *
+  17:usb_driver/Src/usb_mem.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  18:usb_driver/Src/usb_mem.c ****   *
+  19:usb_driver/Src/usb_mem.c ****   * Unless required by applicable law or agreed to in writing, software 
+  20:usb_driver/Src/usb_mem.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  21:usb_driver/Src/usb_mem.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  22:usb_driver/Src/usb_mem.c ****   * See the License for the specific language governing permissions and
+  23:usb_driver/Src/usb_mem.c ****   * limitations under the License.
+  24:usb_driver/Src/usb_mem.c ****   *
+  25:usb_driver/Src/usb_mem.c ****   ******************************************************************************
+  26:usb_driver/Src/usb_mem.c ****   */
+  27:usb_driver/Src/usb_mem.c **** 
+  28:usb_driver/Src/usb_mem.c **** /* Includes ------------------------------------------------------------------*/
+  29:usb_driver/Src/usb_mem.c **** #include "usb_lib.h"
+  30:usb_driver/Src/usb_mem.c **** 
+  31:usb_driver/Src/usb_mem.c **** /* Private typedef -----------------------------------------------------------*/
+ARM GAS  /tmp/ccXx6Lp3.s 			page 2
+
+
+  32:usb_driver/Src/usb_mem.c **** /* Private define ------------------------------------------------------------*/
+  33:usb_driver/Src/usb_mem.c **** /* Private macro -------------------------------------------------------------*/
+  34:usb_driver/Src/usb_mem.c **** /* Private variables ---------------------------------------------------------*/
+  35:usb_driver/Src/usb_mem.c **** /* Extern variables ----------------------------------------------------------*/
+  36:usb_driver/Src/usb_mem.c **** /* Private function prototypes -----------------------------------------------*/
+  37:usb_driver/Src/usb_mem.c **** /* Private functions ---------------------------------------------------------*/
+  38:usb_driver/Src/usb_mem.c **** 
+  39:usb_driver/Src/usb_mem.c **** /*******************************************************************************
+  40:usb_driver/Src/usb_mem.c **** * Function Name  : UserToPMABufferCopy
+  41:usb_driver/Src/usb_mem.c **** * Description    : Copy a buffer from user memory area to packet memory area (PMA)
+  42:usb_driver/Src/usb_mem.c **** * Input          : - pbUsrBuf: pointer to user memory area.
+  43:usb_driver/Src/usb_mem.c **** *                  - wPMABufAddr: address into PMA.
+  44:usb_driver/Src/usb_mem.c **** *                  - wNBytes: no. of bytes to be copied.
+  45:usb_driver/Src/usb_mem.c **** * Output         : None.
+  46:usb_driver/Src/usb_mem.c **** * Return         : None	.
+  47:usb_driver/Src/usb_mem.c **** *******************************************************************************/
+  48:usb_driver/Src/usb_mem.c **** void UserToPMABufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNBytes)
+  49:usb_driver/Src/usb_mem.c **** {
+  28              		.loc 1 49 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  50:usb_driver/Src/usb_mem.c ****   uint32_t n = (wNBytes + 1) >> 1;   /* n = (wNBytes + 1) / 2 */
+  33              		.loc 1 50 3 view .LVU1
+  34              		.loc 1 50 25 is_stmt 0 view .LVU2
+  35 0000 0132     		adds	r2, r2, #1
+  36              	.LVL1:
+  37              		.loc 1 50 30 view .LVU3
+  38 0002 5210     		asrs	r2, r2, #1
+  39              	.LVL2:
+  51:usb_driver/Src/usb_mem.c ****   uint32_t i, temp1, temp2;
+  40              		.loc 1 51 3 is_stmt 1 view .LVU4
+  52:usb_driver/Src/usb_mem.c ****   uint16_t *pdwVal;
+  41              		.loc 1 52 3 view .LVU5
+  53:usb_driver/Src/usb_mem.c ****   pdwVal = (uint16_t *)(wPMABufAddr * 2 + PMAAddr);
+  42              		.loc 1 53 3 view .LVU6
+  43              		.loc 1 53 41 is_stmt 0 view .LVU7
+  44 0004 01F10051 		add	r1, r1, #536870912
+  45              	.LVL3:
+  46              		.loc 1 53 41 view .LVU8
+  47 0008 01F54051 		add	r1, r1, #12288
+  48 000c 4900     		lsls	r1, r1, #1
+  49              	.LVL4:
+  54:usb_driver/Src/usb_mem.c ****   for (i = n; i != 0; i--)
+  50              		.loc 1 54 3 is_stmt 1 view .LVU9
+  51              		.loc 1 54 3 is_stmt 0 view .LVU10
+  52 000e 08E0     		b	.L2
+  53              	.LVL5:
+  54              	.L3:
+  55:usb_driver/Src/usb_mem.c ****   {
+  56:usb_driver/Src/usb_mem.c ****     temp1 = (uint16_t) * pbUsrBuf;
+  55              		.loc 1 56 5 is_stmt 1 discriminator 3 view .LVU11
+  56              		.loc 1 56 24 is_stmt 0 discriminator 3 view .LVU12
+  57 0010 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+  58              	.LVL6:
+  57:usb_driver/Src/usb_mem.c ****     pbUsrBuf++;
+ARM GAS  /tmp/ccXx6Lp3.s 			page 3
+
+
+  59              		.loc 1 57 5 is_stmt 1 discriminator 3 view .LVU13
+  58:usb_driver/Src/usb_mem.c ****     temp2 = temp1 | (uint16_t) * pbUsrBuf << 8;
+  60              		.loc 1 58 5 discriminator 3 view .LVU14
+  61              		.loc 1 58 32 is_stmt 0 discriminator 3 view .LVU15
+  62 0012 90F801C0 		ldrb	ip, [r0, #1]	@ zero_extendqisi2
+  63              		.loc 1 58 11 discriminator 3 view .LVU16
+  64 0016 43EA0C23 		orr	r3, r3, ip, lsl #8
+  65              	.LVL7:
+  59:usb_driver/Src/usb_mem.c ****     *pdwVal++ = temp2;
+  66              		.loc 1 59 5 is_stmt 1 discriminator 3 view .LVU17
+  67              		.loc 1 59 15 is_stmt 0 discriminator 3 view .LVU18
+  68 001a 21F8043B 		strh	r3, [r1], #4	@ movhi
+  69              	.LVL8:
+  60:usb_driver/Src/usb_mem.c ****     pdwVal++;
+  70              		.loc 1 60 5 is_stmt 1 discriminator 3 view .LVU19
+  61:usb_driver/Src/usb_mem.c ****     pbUsrBuf++;
+  71              		.loc 1 61 5 discriminator 3 view .LVU20
+  72              		.loc 1 61 13 is_stmt 0 discriminator 3 view .LVU21
+  73 001e 0230     		adds	r0, r0, #2
+  74              	.LVL9:
+  54:usb_driver/Src/usb_mem.c ****   {
+  75              		.loc 1 54 23 is_stmt 1 discriminator 3 view .LVU22
+  54:usb_driver/Src/usb_mem.c ****   {
+  76              		.loc 1 54 24 is_stmt 0 discriminator 3 view .LVU23
+  77 0020 013A     		subs	r2, r2, #1
+  78              	.LVL10:
+  79              	.L2:
+  54:usb_driver/Src/usb_mem.c ****   {
+  80              		.loc 1 54 15 is_stmt 1 discriminator 1 view .LVU24
+  54:usb_driver/Src/usb_mem.c ****   {
+  81              		.loc 1 54 3 is_stmt 0 discriminator 1 view .LVU25
+  82 0022 002A     		cmp	r2, #0
+  83 0024 F4D1     		bne	.L3
+  62:usb_driver/Src/usb_mem.c ****   }
+  63:usb_driver/Src/usb_mem.c **** }
+  84              		.loc 1 63 1 view .LVU26
+  85 0026 7047     		bx	lr
+  86              		.cfi_endproc
+  87              	.LFE56:
+  89              		.section	.text.PMAToUserBufferCopy,"ax",%progbits
+  90              		.align	1
+  91              		.global	PMAToUserBufferCopy
+  92              		.syntax unified
+  93              		.thumb
+  94              		.thumb_func
+  95              		.fpu softvfp
+  97              	PMAToUserBufferCopy:
+  98              	.LVL11:
+  99              	.LFB57:
+  64:usb_driver/Src/usb_mem.c **** 
+  65:usb_driver/Src/usb_mem.c **** /*******************************************************************************
+  66:usb_driver/Src/usb_mem.c **** * Function Name  : PMAToUserBufferCopy
+  67:usb_driver/Src/usb_mem.c **** * Description    : Copy a buffer from user memory area to packet memory area (PMA)
+  68:usb_driver/Src/usb_mem.c **** * Input          : - pbUsrBuf    = pointer to user memory area.
+  69:usb_driver/Src/usb_mem.c **** *                  - wPMABufAddr = address into PMA.
+  70:usb_driver/Src/usb_mem.c **** *                  - wNBytes     = no. of bytes to be copied.
+  71:usb_driver/Src/usb_mem.c **** * Output         : None.
+ARM GAS  /tmp/ccXx6Lp3.s 			page 4
+
+
+  72:usb_driver/Src/usb_mem.c **** * Return         : None.
+  73:usb_driver/Src/usb_mem.c **** *******************************************************************************/
+  74:usb_driver/Src/usb_mem.c **** void PMAToUserBufferCopy(uint8_t *pbUsrBuf, uint16_t wPMABufAddr, uint16_t wNBytes)
+  75:usb_driver/Src/usb_mem.c **** {
+ 100              		.loc 1 75 1 is_stmt 1 view -0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 104              		@ link register save eliminated.
+  76:usb_driver/Src/usb_mem.c ****   uint32_t n = (wNBytes + 1) >> 1;/* /2*/
+ 105              		.loc 1 76 3 view .LVU28
+ 106              		.loc 1 76 25 is_stmt 0 view .LVU29
+ 107 0000 0132     		adds	r2, r2, #1
+ 108              	.LVL12:
+ 109              		.loc 1 76 30 view .LVU30
+ 110 0002 5210     		asrs	r2, r2, #1
+ 111              	.LVL13:
+  77:usb_driver/Src/usb_mem.c ****   uint32_t i;
+ 112              		.loc 1 77 3 is_stmt 1 view .LVU31
+  78:usb_driver/Src/usb_mem.c ****   uint32_t *pdwVal;
+ 113              		.loc 1 78 3 view .LVU32
+  79:usb_driver/Src/usb_mem.c ****   pdwVal = (uint32_t *)(wPMABufAddr * 2 + PMAAddr);
+ 114              		.loc 1 79 3 view .LVU33
+ 115              		.loc 1 79 41 is_stmt 0 view .LVU34
+ 116 0004 01F10051 		add	r1, r1, #536870912
+ 117              	.LVL14:
+ 118              		.loc 1 79 41 view .LVU35
+ 119 0008 01F54051 		add	r1, r1, #12288
+ 120 000c 4900     		lsls	r1, r1, #1
+ 121              	.LVL15:
+  80:usb_driver/Src/usb_mem.c ****   for (i = n; i != 0; i--)
+ 122              		.loc 1 80 3 is_stmt 1 view .LVU36
+ 123              		.loc 1 80 3 is_stmt 0 view .LVU37
+ 124 000e 04E0     		b	.L5
+ 125              	.LVL16:
+ 126              	.L6:
+  81:usb_driver/Src/usb_mem.c ****   {
+  82:usb_driver/Src/usb_mem.c ****     *(uint16_t*)pbUsrBuf++ = *pdwVal++;
+ 127              		.loc 1 82 5 is_stmt 1 discriminator 3 view .LVU38
+ 128              		.loc 1 82 30 is_stmt 0 discriminator 3 view .LVU39
+ 129 0010 51F8043B 		ldr	r3, [r1], #4
+ 130              	.LVL17:
+ 131              		.loc 1 82 28 discriminator 3 view .LVU40
+ 132 0014 20F8023B 		strh	r3, [r0], #2	@ movhi
+ 133              	.LVL18:
+  83:usb_driver/Src/usb_mem.c ****     pbUsrBuf++;
+ 134              		.loc 1 83 5 is_stmt 1 discriminator 3 view .LVU41
+  80:usb_driver/Src/usb_mem.c ****   for (i = n; i != 0; i--)
+ 135              		.loc 1 80 23 discriminator 3 view .LVU42
+  80:usb_driver/Src/usb_mem.c ****   for (i = n; i != 0; i--)
+ 136              		.loc 1 80 24 is_stmt 0 discriminator 3 view .LVU43
+ 137 0018 013A     		subs	r2, r2, #1
+ 138              	.LVL19:
+ 139              	.L5:
+  80:usb_driver/Src/usb_mem.c ****   for (i = n; i != 0; i--)
+ 140              		.loc 1 80 15 is_stmt 1 discriminator 1 view .LVU44
+  80:usb_driver/Src/usb_mem.c ****   for (i = n; i != 0; i--)
+ARM GAS  /tmp/ccXx6Lp3.s 			page 5
+
+
+ 141              		.loc 1 80 3 is_stmt 0 discriminator 1 view .LVU45
+ 142 001a 002A     		cmp	r2, #0
+ 143 001c F8D1     		bne	.L6
+  84:usb_driver/Src/usb_mem.c ****   }
+  85:usb_driver/Src/usb_mem.c **** }
+ 144              		.loc 1 85 1 view .LVU46
+ 145 001e 7047     		bx	lr
+ 146              		.cfi_endproc
+ 147              	.LFE57:
+ 149              		.text
+ 150              	.Letext0:
+ 151              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ARM GAS  /tmp/ccXx6Lp3.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb_mem.c
+     /tmp/ccXx6Lp3.s:16     .text.UserToPMABufferCopy:0000000000000000 $t
+     /tmp/ccXx6Lp3.s:24     .text.UserToPMABufferCopy:0000000000000000 UserToPMABufferCopy
+     /tmp/ccXx6Lp3.s:90     .text.PMAToUserBufferCopy:0000000000000000 $t
+     /tmp/ccXx6Lp3.s:97     .text.PMAToUserBufferCopy:0000000000000000 PMAToUserBufferCopy
+
+NO UNDEFINED SYMBOLS

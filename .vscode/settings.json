@@ -1,0 +1,5 @@
+{
+    "cortex-debug.JLinkGDBServerPath": "/opt/SEGGER/JLink_V792h/JLinkGDBServer",
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "cmake.configureOnOpen": false,
+}

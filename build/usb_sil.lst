@@ -1,0 +1,300 @@
+ARM GAS  /tmp/ccZJilgd.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usb_sil.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.USB_SIL_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	USB_SIL_Init
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	USB_SIL_Init:
+  25              	.LFB56:
+  26              		.file 1 "usb_driver/Src/usb_sil.c"
+   1:usb_driver/Src/usb_sil.c **** /**
+   2:usb_driver/Src/usb_sil.c ****   ******************************************************************************
+   3:usb_driver/Src/usb_sil.c ****   * @file    usb_sil.c
+   4:usb_driver/Src/usb_sil.c ****   * @author  MCD Application Team
+   5:usb_driver/Src/usb_sil.c ****   * @version V4.0.0
+   6:usb_driver/Src/usb_sil.c ****   * @date    28-August-2012
+   7:usb_driver/Src/usb_sil.c ****   * @brief   Simplified Interface Layer for Global Initialization and Endpoint
+   8:usb_driver/Src/usb_sil.c ****   *          Rea/Write operations.
+   9:usb_driver/Src/usb_sil.c ****   ******************************************************************************
+  10:usb_driver/Src/usb_sil.c ****   * @attention
+  11:usb_driver/Src/usb_sil.c ****   *
+  12:usb_driver/Src/usb_sil.c ****   * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  13:usb_driver/Src/usb_sil.c ****   *
+  14:usb_driver/Src/usb_sil.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  15:usb_driver/Src/usb_sil.c ****   * You may not use this file except in compliance with the License.
+  16:usb_driver/Src/usb_sil.c ****   * You may obtain a copy of the License at:
+  17:usb_driver/Src/usb_sil.c ****   *
+  18:usb_driver/Src/usb_sil.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  19:usb_driver/Src/usb_sil.c ****   *
+  20:usb_driver/Src/usb_sil.c ****   * Unless required by applicable law or agreed to in writing, software 
+  21:usb_driver/Src/usb_sil.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  22:usb_driver/Src/usb_sil.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  23:usb_driver/Src/usb_sil.c ****   * See the License for the specific language governing permissions and
+  24:usb_driver/Src/usb_sil.c ****   * limitations under the License.
+  25:usb_driver/Src/usb_sil.c ****   *
+  26:usb_driver/Src/usb_sil.c ****   ******************************************************************************
+  27:usb_driver/Src/usb_sil.c ****   */
+  28:usb_driver/Src/usb_sil.c **** 
+  29:usb_driver/Src/usb_sil.c **** 
+  30:usb_driver/Src/usb_sil.c **** /* Includes ------------------------------------------------------------------*/
+  31:usb_driver/Src/usb_sil.c **** #include "usb_lib.h"
+  32:usb_driver/Src/usb_sil.c **** 
+ARM GAS  /tmp/ccZJilgd.s 			page 2
+
+
+  33:usb_driver/Src/usb_sil.c **** /* Private typedef -----------------------------------------------------------*/
+  34:usb_driver/Src/usb_sil.c **** /* Private define ------------------------------------------------------------*/
+  35:usb_driver/Src/usb_sil.c **** /* Private macro -------------------------------------------------------------*/
+  36:usb_driver/Src/usb_sil.c **** /* Private variables ---------------------------------------------------------*/
+  37:usb_driver/Src/usb_sil.c **** /* Extern variables ----------------------------------------------------------*/
+  38:usb_driver/Src/usb_sil.c **** /* Private function prototypes -----------------------------------------------*/
+  39:usb_driver/Src/usb_sil.c **** /* Private functions ---------------------------------------------------------*/
+  40:usb_driver/Src/usb_sil.c **** 
+  41:usb_driver/Src/usb_sil.c **** /*******************************************************************************
+  42:usb_driver/Src/usb_sil.c **** * Function Name  : USB_SIL_Init
+  43:usb_driver/Src/usb_sil.c **** * Description    : Initialize the USB Device IP and the Endpoint 0.
+  44:usb_driver/Src/usb_sil.c **** * Input          : None.
+  45:usb_driver/Src/usb_sil.c **** * Output         : None.
+  46:usb_driver/Src/usb_sil.c **** * Return         : Status.
+  47:usb_driver/Src/usb_sil.c **** *******************************************************************************/
+  48:usb_driver/Src/usb_sil.c **** uint32_t USB_SIL_Init(void)
+  49:usb_driver/Src/usb_sil.c **** {
+  27              		.loc 1 49 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  50:usb_driver/Src/usb_sil.c ****   /* USB interrupts initialization */
+  51:usb_driver/Src/usb_sil.c ****   /* clear pending interrupts */
+  52:usb_driver/Src/usb_sil.c ****   _SetISTR(0);
+  32              		.loc 1 52 3 view .LVU1
+  33 0000 054B     		ldr	r3, .L2
+  34 0002 0020     		movs	r0, #0
+  35 0004 C3F8440C 		str	r0, [r3, #3140]
+  53:usb_driver/Src/usb_sil.c ****   wInterrupt_Mask = IMR_MSK;
+  36              		.loc 1 53 3 view .LVU2
+  37              		.loc 1 53 19 is_stmt 0 view .LVU3
+  38 0008 4FF40442 		mov	r2, #33792
+  39 000c 0349     		ldr	r1, .L2+4
+  40 000e 0A80     		strh	r2, [r1]	@ movhi
+  54:usb_driver/Src/usb_sil.c ****   /* set interrupts mask */
+  55:usb_driver/Src/usb_sil.c ****   _SetCNTR(wInterrupt_Mask);
+  41              		.loc 1 55 3 is_stmt 1 view .LVU4
+  42 0010 C3F8402C 		str	r2, [r3, #3136]
+  56:usb_driver/Src/usb_sil.c ****   return 0;
+  43              		.loc 1 56 3 view .LVU5
+  57:usb_driver/Src/usb_sil.c **** }
+  44              		.loc 1 57 1 is_stmt 0 view .LVU6
+  45 0014 7047     		bx	lr
+  46              	.L3:
+  47 0016 00BF     		.align	2
+  48              	.L2:
+  49 0018 00500040 		.word	1073762304
+  50 001c 00000000 		.word	wInterrupt_Mask
+  51              		.cfi_endproc
+  52              	.LFE56:
+  54              		.section	.text.USB_SIL_Write,"ax",%progbits
+  55              		.align	1
+  56              		.global	USB_SIL_Write
+  57              		.syntax unified
+  58              		.thumb
+  59              		.thumb_func
+ARM GAS  /tmp/ccZJilgd.s 			page 3
+
+
+  60              		.fpu softvfp
+  62              	USB_SIL_Write:
+  63              	.LVL0:
+  64              	.LFB57:
+  58:usb_driver/Src/usb_sil.c **** 
+  59:usb_driver/Src/usb_sil.c **** /*******************************************************************************
+  60:usb_driver/Src/usb_sil.c **** * Function Name  : USB_SIL_Write
+  61:usb_driver/Src/usb_sil.c **** * Description    : Write a buffer of data to a selected endpoint.
+  62:usb_driver/Src/usb_sil.c **** * Input          : - bEpAddr: The address of the non control endpoint.
+  63:usb_driver/Src/usb_sil.c **** *                  - pBufferPointer: The pointer to the buffer of data to be written
+  64:usb_driver/Src/usb_sil.c **** *                    to the endpoint.
+  65:usb_driver/Src/usb_sil.c **** *                  - wBufferSize: Number of data to be written (in bytes).
+  66:usb_driver/Src/usb_sil.c **** * Output         : None.
+  67:usb_driver/Src/usb_sil.c **** * Return         : Status.
+  68:usb_driver/Src/usb_sil.c **** *******************************************************************************/
+  69:usb_driver/Src/usb_sil.c **** uint32_t USB_SIL_Write(uint8_t bEpAddr, uint8_t* pBufferPointer, uint32_t wBufferSize)
+  70:usb_driver/Src/usb_sil.c **** {
+  65              		.loc 1 70 1 is_stmt 1 view -0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69              		.loc 1 70 1 is_stmt 0 view .LVU8
+  70 0000 70B5     		push	{r4, r5, r6, lr}
+  71              	.LCFI0:
+  72              		.cfi_def_cfa_offset 16
+  73              		.cfi_offset 4, -16
+  74              		.cfi_offset 5, -12
+  75              		.cfi_offset 6, -8
+  76              		.cfi_offset 14, -4
+  77 0002 0E46     		mov	r6, r1
+  78 0004 1446     		mov	r4, r2
+  71:usb_driver/Src/usb_sil.c ****   /* Use the memory interface function to write to the selected endpoint */
+  72:usb_driver/Src/usb_sil.c ****   UserToPMABufferCopy(pBufferPointer, GetEPTxAddr(bEpAddr & 0x7F), wBufferSize);
+  79              		.loc 1 72 3 is_stmt 1 view .LVU9
+  80 0006 00F07F05 		and	r5, r0, #127
+  81 000a 2846     		mov	r0, r5
+  82              	.LVL1:
+  83              		.loc 1 72 3 is_stmt 0 view .LVU10
+  84 000c FFF7FEFF 		bl	GetEPTxAddr
+  85              	.LVL2:
+  86              		.loc 1 72 3 view .LVU11
+  87 0010 0146     		mov	r1, r0
+  88 0012 A4B2     		uxth	r4, r4
+  89              	.LVL3:
+  90              		.loc 1 72 3 view .LVU12
+  91 0014 2246     		mov	r2, r4
+  92 0016 3046     		mov	r0, r6
+  93 0018 FFF7FEFF 		bl	UserToPMABufferCopy
+  94              	.LVL4:
+  73:usb_driver/Src/usb_sil.c **** 
+  74:usb_driver/Src/usb_sil.c ****   /* Update the data length in the control register */
+  75:usb_driver/Src/usb_sil.c ****   SetEPTxCount((bEpAddr & 0x7F), wBufferSize);
+  95              		.loc 1 75 3 is_stmt 1 view .LVU13
+  96 001c 2146     		mov	r1, r4
+  97 001e 2846     		mov	r0, r5
+  98 0020 FFF7FEFF 		bl	SetEPTxCount
+  99              	.LVL5:
+ARM GAS  /tmp/ccZJilgd.s 			page 4
+
+
+  76:usb_driver/Src/usb_sil.c ****   
+  77:usb_driver/Src/usb_sil.c ****   return 0;
+ 100              		.loc 1 77 3 view .LVU14
+  78:usb_driver/Src/usb_sil.c **** }
+ 101              		.loc 1 78 1 is_stmt 0 view .LVU15
+ 102 0024 0020     		movs	r0, #0
+ 103 0026 70BD     		pop	{r4, r5, r6, pc}
+ 104              		.loc 1 78 1 view .LVU16
+ 105              		.cfi_endproc
+ 106              	.LFE57:
+ 108              		.section	.text.USB_SIL_Read,"ax",%progbits
+ 109              		.align	1
+ 110              		.global	USB_SIL_Read
+ 111              		.syntax unified
+ 112              		.thumb
+ 113              		.thumb_func
+ 114              		.fpu softvfp
+ 116              	USB_SIL_Read:
+ 117              	.LVL6:
+ 118              	.LFB58:
+  79:usb_driver/Src/usb_sil.c **** 
+  80:usb_driver/Src/usb_sil.c **** /*******************************************************************************
+  81:usb_driver/Src/usb_sil.c **** * Function Name  : USB_SIL_Read
+  82:usb_driver/Src/usb_sil.c **** * Description    : Write a buffer of data to a selected endpoint.
+  83:usb_driver/Src/usb_sil.c **** * Input          : - bEpAddr: The address of the non control endpoint.
+  84:usb_driver/Src/usb_sil.c **** *                  - pBufferPointer: The pointer to which will be saved the 
+  85:usb_driver/Src/usb_sil.c **** *                     received data buffer.
+  86:usb_driver/Src/usb_sil.c **** * Output         : None.
+  87:usb_driver/Src/usb_sil.c **** * Return         : Number of received data (in Bytes).
+  88:usb_driver/Src/usb_sil.c **** *******************************************************************************/
+  89:usb_driver/Src/usb_sil.c **** uint32_t USB_SIL_Read(uint8_t bEpAddr, uint8_t* pBufferPointer)
+  90:usb_driver/Src/usb_sil.c **** {
+ 119              		.loc 1 90 1 is_stmt 1 view -0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123              		.loc 1 90 1 is_stmt 0 view .LVU18
+ 124 0000 70B5     		push	{r4, r5, r6, lr}
+ 125              	.LCFI1:
+ 126              		.cfi_def_cfa_offset 16
+ 127              		.cfi_offset 4, -16
+ 128              		.cfi_offset 5, -12
+ 129              		.cfi_offset 6, -8
+ 130              		.cfi_offset 14, -4
+ 131 0002 0E46     		mov	r6, r1
+  91:usb_driver/Src/usb_sil.c ****   uint32_t DataLength = 0;
+ 132              		.loc 1 91 3 is_stmt 1 view .LVU19
+ 133              	.LVL7:
+  92:usb_driver/Src/usb_sil.c **** 
+  93:usb_driver/Src/usb_sil.c ****   /* Get the number of received data on the selected Endpoint */
+  94:usb_driver/Src/usb_sil.c ****   DataLength = GetEPRxCount(bEpAddr & 0x7F);
+ 134              		.loc 1 94 3 view .LVU20
+ 135              		.loc 1 94 16 is_stmt 0 view .LVU21
+ 136 0004 00F07F05 		and	r5, r0, #127
+ 137 0008 2846     		mov	r0, r5
+ 138              	.LVL8:
+ 139              		.loc 1 94 16 view .LVU22
+ARM GAS  /tmp/ccZJilgd.s 			page 5
+
+
+ 140 000a FFF7FEFF 		bl	GetEPRxCount
+ 141              	.LVL9:
+ 142              		.loc 1 94 16 view .LVU23
+ 143 000e 0446     		mov	r4, r0
+ 144              	.LVL10:
+  95:usb_driver/Src/usb_sil.c ****   
+  96:usb_driver/Src/usb_sil.c ****   /* Use the memory interface function to write to the selected endpoint */
+  97:usb_driver/Src/usb_sil.c ****   PMAToUserBufferCopy(pBufferPointer, GetEPRxAddr(bEpAddr & 0x7F), DataLength);
+ 145              		.loc 1 97 3 is_stmt 1 view .LVU24
+ 146 0010 2846     		mov	r0, r5
+ 147              	.LVL11:
+ 148              		.loc 1 97 3 is_stmt 0 view .LVU25
+ 149 0012 FFF7FEFF 		bl	GetEPRxAddr
+ 150              	.LVL12:
+ 151 0016 0146     		mov	r1, r0
+ 152 0018 2246     		mov	r2, r4
+ 153 001a 3046     		mov	r0, r6
+ 154 001c FFF7FEFF 		bl	PMAToUserBufferCopy
+ 155              	.LVL13:
+  98:usb_driver/Src/usb_sil.c **** 
+  99:usb_driver/Src/usb_sil.c ****   /* Return the number of received data */
+ 100:usb_driver/Src/usb_sil.c ****   return DataLength;
+ 156              		.loc 1 100 3 is_stmt 1 view .LVU26
+ 101:usb_driver/Src/usb_sil.c **** }
+ 157              		.loc 1 101 1 is_stmt 0 view .LVU27
+ 158 0020 2046     		mov	r0, r4
+ 159 0022 70BD     		pop	{r4, r5, r6, pc}
+ 160              		.loc 1 101 1 view .LVU28
+ 161              		.cfi_endproc
+ 162              	.LFE58:
+ 164              		.text
+ 165              	.Letext0:
+ 166              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 167              		.file 3 "usb_driver/Inc/usb_init.h"
+ 168              		.file 4 "usb_driver/Inc/usb_regs.h"
+ 169              		.file 5 "usb_driver/Inc/usb_mem.h"
+ARM GAS  /tmp/ccZJilgd.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usb_sil.c
+     /tmp/ccZJilgd.s:16     .text.USB_SIL_Init:0000000000000000 $t
+     /tmp/ccZJilgd.s:24     .text.USB_SIL_Init:0000000000000000 USB_SIL_Init
+     /tmp/ccZJilgd.s:49     .text.USB_SIL_Init:0000000000000018 $d
+     /tmp/ccZJilgd.s:55     .text.USB_SIL_Write:0000000000000000 $t
+     /tmp/ccZJilgd.s:62     .text.USB_SIL_Write:0000000000000000 USB_SIL_Write
+     /tmp/ccZJilgd.s:109    .text.USB_SIL_Read:0000000000000000 $t
+     /tmp/ccZJilgd.s:116    .text.USB_SIL_Read:0000000000000000 USB_SIL_Read
+
+UNDEFINED SYMBOLS
+wInterrupt_Mask
+GetEPTxAddr
+UserToPMABufferCopy
+SetEPTxCount
+GetEPRxCount
+GetEPRxAddr
+PMAToUserBufferCopy

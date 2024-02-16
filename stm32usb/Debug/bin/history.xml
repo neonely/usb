@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="5.4.1 -mcpu=cortex-m3 -mthumb -g -nostartfiles -Map=stm32usb.map -O0 --gc-sections -LC:\Programs\CooCox\CoIDE\configuration\ProgramData\stm32usb -TC:\Programs\CooCox\CoIDE\configuration\ProgramData\stm32usb/arm-gcc-link.ld -g">
+      <target file="stm32usb.elf" lastModified="169f0df3228">
+         <source file="..\obj\usb_core.o" lastModified="169f0df21bd"/>
+         <source file="..\obj\my_inits.o" lastModified="169f0df2269"/>
+         <source file="..\obj\nrf24l01.o" lastModified="169f0df22f6"/>
+         <source file="..\obj\usb_int.o" lastModified="169f0df2392"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="169f0df241f"/>
+         <source file="..\obj\startup_stm32f10x_hd.o" lastModified="169f0df247c"/>
+         <source file="..\obj\usb_desc.o" lastModified="169f0df2509"/>
+         <source file="..\obj\usb_regs.o" lastModified="169f0df25e4"/>
+         <source file="..\obj\hw_config.o" lastModified="169f0df2661"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="169f0df26fd"/>
+         <source file="..\obj\usb_prop.o" lastModified="169f0df2799"/>
+         <source file="..\obj\usb_init.o" lastModified="169f0df2816"/>
+         <source file="..\obj\main.o" lastModified="169f0df28a3"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="169f0df294f"/>
+         <source file="..\obj\usb_sil.o" lastModified="169f0df29cc"/>
+         <source file="..\obj\stm32f10x_flash.o" lastModified="169f0df2a87"/>
+         <source file="..\obj\usb_endp.o" lastModified="169f0df2bb0"/>
+         <source file="..\obj\lcd.o" lastModified="169f0df2c4c"/>
+         <source file="..\obj\misc.o" lastModified="169f0df2cd9"/>
+         <source file="..\obj\stm32f10x_spi.o" lastModified="169f0df2d85"/>
+         <source file="..\obj\stm32f10x_i2c.o" lastModified="169f0df2e31"/>
+         <source file="..\obj\usb_mem.o" lastModified="169f0df2ebd"/>
+         <source file="..\obj\usb_istr.o" lastModified="169f0df2f3a"/>
+      </target>
+   </processor>
+</history>
