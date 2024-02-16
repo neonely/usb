@@ -14,7 +14,7 @@ int _write(int file, char *ptr, int len)
 	return 0;
 }
 #endif
-
+//
 uint8_t bulk_buffer[64];
 unsigned char str[] = "Hello from USB device STM32!!!\nHello from USB device STM32!!!!\n";
 
